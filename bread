@@ -1,0 +1,100 @@
+#!/bin/bash
+
+# bread is a complimentary utility for b (boredbutton). 
+# please put b in your bin if you haven't already.
+
+# check if count.txt exists.
+if [ ! -f ~/.bcount/count.txt ]; then
+    echo "Counter data not found! Are you sure you have boredbutton?"
+    exit
+fi
+
+# check if count.txt if readable.
+if [ ! -r ~/.bcount/count.txt ]
+then
+    echo "Counter data is not readable. Attempting to fix..."
+    chmod 777 ~/.bcount/count.txt
+    if [ ! -r ~/.bcount/count.txt ]
+    then
+        sudo chmod 777 ~/.bcount/count.txt
+        if [ ! -r ~/.bcount/count.txt ]
+        then
+            echo "Could not make count.txt readable."
+            exit
+        fi
+    fi
+fi
+
+# check if count.txt is writeable.
+if [ ! -w ~/.bcount/count.txt ]
+then
+    echo "Counter data not is not writeable. Attempting to fix..."
+    chmod 777 ~/.bcount/count.txt
+    if [ ! -w ~/.bcount/count.txt ]
+    then
+        sudo chmod 777 ~/.bcount/count.txt
+        if [ ! -w ~/.bcount/count.txt ]
+        then
+            echo "Could not make count.txt writeable."
+            exit
+        fi
+    fi
+fi
+
+# load current count
+ccount=$(<~/.bcount/count.txt)
+
+# check if the counter isn't empty.
+if [ -z $ccount ]
+then
+    echo "Counter data empty! Are you sure you ran boredbutton (b)?"
+    exit
+fi
+
+# print current count.
+clear
+echo "You used the 'I'm bored' button $ccount times."
+echo "###"
+echo "If you want to remove counter data, type 'del' (without quotations). "
+echo "If you want to decrease the counter by 1, type 'decr' (without quotations)."
+echo "If you want to set the counter to a certain value, type 'set' (without quotations)."
+echo "To exit, type anything else or just press Enter."
+read -r option
+
+# if we leave an empty string in read, the if statement will error out. 
+# instead of forcing it to output errors to /dev/nul, we use a more elegant solution:
+if [ -z "$option" ]
+then
+    exit
+fi
+
+# parse option.
+if [ "$option" = "del" ]
+then
+    rm -rf ~/.bcount/count.txt
+    echo "Done."
+    exit
+fi
+if [ "$option" = "decr" ]
+then
+    let ccount--
+    echo "$ccount" > ~/.bcount/count.txt
+    exit
+fi
+if [ "$option" = "set" ]
+then
+    echo "###"
+    echo "Input value: (Must be a valid number!)"
+    read -r newval
+    # prevent the user from inputing an invalid value.
+    re='^[0-9]+$'
+    if ! [[ $newval =~ $re ]]
+    then
+        echo "Not a number! Please restart bread and input a valid number."
+        exit
+    fi
+    echo "$newval" > ~/.bcount/count.txt
+    echo "Done!"
+    exit
+fi
+exit
