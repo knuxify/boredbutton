@@ -8,6 +8,7 @@ if [ ! -f ~/.bcount/count.txt ]; then
         mkdir ~/.bcount
     fi
     echo "1" > ~/.bcount/count.txt
+    echo "I'm bored!"
     exit
 fi
 
