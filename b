@@ -12,6 +12,8 @@ if [ ! -f ~/.bcount/count.txt ]; then
     exit
 fi
 
+# read and write test functions. I moved them to functions since that way they can be accessed at any time.
+function readtest {
 # check if count.txt if readable.
 if [ ! -r ~/.bcount/count.txt ]
 then
@@ -27,7 +29,9 @@ then
         fi
     fi
 fi
+}
 
+function writetest {
 # check if count.txt is writeable.
 if [ ! -w ~/.bcount/count.txt ]
 then
@@ -43,8 +47,13 @@ then
         fi
     fi
 fi
+}
+# Perform tests.
+readtest
+writetest
 
 echo "I'm bored!"
+
 # fetch current count
 ccount=$(<~/.bcount/count.txt)
 
@@ -59,4 +68,26 @@ fi
 # write to file
 echo "$ccount" > ~/.bcount/count.txt
 
+#check if write succeded
 
+ccounttest=$(<~/.bcount/count.txt)
+if [ ! $ccounttest = $ccount ]
+then
+    echo "Write failed!"
+    echo "Troubleshooting..."
+    readtest
+    writetest
+    echo "Retrying..."
+    echo "$ccount" > ~/.bcount/count.txt
+    if [ ! $ccounttest = $ccount ]
+    then
+        echo "Failed. Retrying with sudo..."
+        sudo echo "$ccount" > ~/.bcount/count.txt
+        if [ ! $ccounttest = $ccount ]
+        then
+            echo "Failed to write. Exiting..."
+            exit
+        fi
+    fi
+    echo "Done!"
+fi
