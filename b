@@ -43,6 +43,7 @@ then
     fi
 fi
 
+echo "I'm bored!"
 # fetch current count
 ccount=$(<~/.bcount/count.txt)
 
@@ -55,7 +56,6 @@ else
 fi
 
 # write to file
-echo "You're bored."
 echo "$ccount" > ~/.bcount/count.txt
 
 
