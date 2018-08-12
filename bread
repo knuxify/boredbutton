@@ -3,6 +3,100 @@
 # bread is a complimentary utility for b (boredbutton). 
 # please put b in your bin if you haven't already.
 
+# Some checks were moved to functions.
+function fdel {
+    rm -rf ~/.bcount/count.txt
+    echo "Done."
+    exit
+}
+
+function fdecr {
+    let ccount--
+    echo "$ccount" > ~/.bcount/count.txt
+    exit
+}
+
+function fset {
+    echo "###"
+    echo "Input value: (Must be a valid number!)"
+    read -r newval
+    # prevent the user from inputing an invalid value.
+    re='^[0-9]+$'
+    if ! [[ $newval =~ $re ]]
+    then
+        echo "Not a number! Please restart bread and input a valid number."
+        exit
+    fi
+    echo "$newval" > ~/.bcount/count.txt
+    echo "Done!"
+    exit
+}
+function factdel {
+    rm -rf ~/.bcount/actlist.txt
+    echo "Done."
+    exit
+}
+function factnew {
+    echo "###"
+    echo "Checking for existing activities..."
+varname="name"
+vardesc="desc"
+currentid="0"
+while read -r line
+do
+    if [[ $line == ID* ]]
+    then
+        currentid=$line
+    else
+        if [[ $line == name=* ]]
+        then
+            line="${line:5}"
+            makeline=$currentid$varname
+            declare "$makeline=$makeline$line"
+        else
+        if [[ $line == desc=* ]]
+        then
+            line="${line:5}"
+            makeline=$currentid$vardesc
+            declare "$makeline=$makeline$line"
+        else
+            echo -e "Invalid line! Ignoring. Line content:\n$line"
+        fi
+        fi
+    fi
+done < "$filename"
+idcount="${currentid:2}"
+    echo "Done."
+    clear
+    echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    echo "Welcome to the Activity Creation Wizard."
+    echo "Please type in the activity you want to add, for example, 'Write a script'. This is going to appear after 'How about you...', so make sure it fits."
+    read -r newactname
+    clear
+    echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    echo "Done!"
+    echo "Now, please type in the activity description, for example, 'Make a cool script that makes your life easier'."
+    read -r newactdesc
+    clear
+    echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    echo "A new activity will be added with the following info:"
+    echo "Name: $newactname"
+    echo "Description: $newactdesc"
+    echo "If this is correct, press Enter. If it's not, press Ctrl+C."
+    read -rn1
+    let idcount++
+    echo "ID$idcount" >> ~/.bcount/actlist.txt
+    echo "$newactname" >> ~/.bcount/actlist.txt
+    echo "$newactdesc" >> ~/.bcount/actlist.txt
+    clear
+    echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    echo "Done! Your new activity has been added."
+    echo "Press any button to exit."
+    read -rn1
+    exit
+}
+# CHECKS
+
 # check if count.txt exists.
 if [ ! -f ~/.bcount/count.txt ]; then
     echo "Counter data not found! Are you sure you have boredbutton?"
@@ -41,6 +135,46 @@ then
     fi
 fi
 
+# CHECKS
+
+# check if actlist.txt exists.
+if [ ! -f ~/.bcount/actlist.txt ]; then
+    echo "Activity list not found! Make sure you ran boredbutton (b) at least once."
+    exit
+fi
+
+# check if count.txt if readable.
+if [ ! -r ~/.bcount/actlist.txt ]
+then
+    echo "Activity list data is not readable. Attempting to fix..."
+    chmod 777 ~/.bcount/actlist.txt
+    if [ ! -r ~/.bcount/actlist.txt ]
+    then
+        sudo chmod 777 ~/.bcount/actlist.txt
+        if [ ! -r ~/.bcount/actlist.txt ]
+        then
+            echo "Could not make actlist.txt readable."
+            exit
+        fi
+    fi
+fi
+
+# check if actlist.txt is writeable.
+if [ ! -w ~/.bcount/actlist.txt ]
+then
+    echo "The activity list is not writeable. Attempting to fix..."
+    chmod 777 ~/.bcount/actlist.txt
+    if [ ! -w ~/.bcount/actlist.txt ]
+    then
+        sudo chmod 777 ~/.bcount/actlist.txt
+        if [ ! -w ~/.bcount/actlist.txt ]
+        then
+            echo "Could not make actlist.txt writeable."
+            exit
+        fi
+    fi
+fi
+
 # load current count
 ccount=$(<~/.bcount/count.txt)
 
@@ -52,16 +186,21 @@ then
 fi
 
 # print current count.
-clear
+
 echo "You used the 'I'm bored' button $ccount times."
-echo "###"
+echo "### Counter options ###"
 echo "If you want to remove counter data, type 'del' (without quotations). "
 echo "If you want to decrease the counter by 1, type 'decr' (without quotations)."
 echo "If you want to set the counter to a certain value, type 'set' (without quotations)."
+echo "### Activity options ###"
+echo "If you want to clear all activity data, type 'actdel' (without quotations)."
+echo "If you want to create a new activity, use the Activity Creation Wizard by typing 'actcreator' (without quotations)."
+echo "If you want to print out all activities, type in 'printact' (without quotations)."
+echo "### Miscellaneous ###"
 echo "To exit, type anything else or just press Enter."
 read -r option
 
-# if we leave an empty string in read, the if statement will error out. 
+# if we leave an empty string in read, the if statement will error out.
 # instead of forcing it to output errors to /dev/nul, we use a more elegant solution:
 if [ -z "$option" ]
 then
@@ -71,30 +210,26 @@ fi
 # parse option.
 if [ "$option" = "del" ]
 then
-    rm -rf ~/.bcount/count.txt
-    echo "Done."
-    exit
+    fdel
 fi
 if [ "$option" = "decr" ]
 then
-    let ccount--
-    echo "$ccount" > ~/.bcount/count.txt
-    exit
+    fdecr
 fi
 if [ "$option" = "set" ]
 then
-    echo "###"
-    echo "Input value: (Must be a valid number!)"
-    read -r newval
-    # prevent the user from inputing an invalid value.
-    re='^[0-9]+$'
-    if ! [[ $newval =~ $re ]]
-    then
-        echo "Not a number! Please restart bread and input a valid number."
-        exit
-    fi
-    echo "$newval" > ~/.bcount/count.txt
-    echo "Done!"
-    exit
+    fset
+fi
+if [ "$option" = "actdel" ]
+then
+    factdel
+fi
+if [ "$option" = "actcreator" ]
+then
+    factnew
+fi
+if [ "$option" = "printact" ]
+then
+    cat ~/.bcount/actlist.txt
 fi
 exit
