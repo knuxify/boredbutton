@@ -11,5 +11,4 @@ Run ``b`` in the terminal. It's that simple!
 ``bread`` is an utility that allows you to monitor your "I'm bored" button, as well as make various modifications to it.
 ## To do
 - Double check if the write succeded in ``bread`` functions (it already checks if file is writeable)
-- Add activity suggestions to ``b`` 
 - Symlink option in ``bread``
