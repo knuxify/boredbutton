@@ -147,7 +147,6 @@ rnamelenght=${#readablename}
 rdesclenght=${#readabledesc}
 
 # Output everything.
-clear
 echo "So you're bored, right? How about you:"
 echo "${!readablename:$rnamelenght}"
 echo "${!readabledesc:$rdesclenght}"

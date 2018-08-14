@@ -19,7 +19,7 @@ function fdecr {
 function fset {
     echo "###"
     echo "Input value: (Must be a valid number!)"
-    read -r newval
+    read -re newval
     # prevent the user from inputing an invalid value.
     re='^[0-9]+$'
     if ! [[ $newval =~ $re ]]
@@ -42,7 +42,7 @@ function factnew {
 varname="name"
 vardesc="desc"
 currentid="0"
-while read -r line
+while read -re line
 do
     if [[ $line == ID* ]]
     then
@@ -64,26 +64,26 @@ do
         fi
         fi
     fi
-done < "$filename"
-idcount="${currentid:2}"
+    done < "$filename"
+    idcount="${currentid:2}"
     echo "Done."
     clear
     echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     echo "Welcome to the Activity Creation Wizard."
     echo "Please type in the activity you want to add, for example, 'Write a script'. This is going to appear after 'How about you...', so make sure it fits."
-    read -r newactname
+    read -re newactname
     clear
     echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     echo "Done!"
     echo "Now, please type in the activity description, for example, 'Make a cool script that makes your life easier'."
-    read -r newactdesc
+    read -re newactdesc
     clear
     echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     echo "A new activity will be added with the following info:"
     echo "Name: $newactname"
     echo "Description: $newactdesc"
     echo "If this is correct, press Enter. If it's not, press Ctrl+C."
-    read -rn1
+    read -ren1
     let idcount++
     echo "ID$idcount" >> ~/.bcount/actlist.txt
     echo "$newactname" >> ~/.bcount/actlist.txt
@@ -92,9 +92,99 @@ idcount="${currentid:2}"
     echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     echo "Done! Your new activity has been added."
     echo "Press any button to exit."
-    read -rn1
+    read -ren1
     exit
 }
+
+function fsymlink {
+    echo "###"
+    echo "Type in the symlink name. Please do not type in full paths, just a command that you'll use to invoke boredbutton."
+    read -re symname
+    ln -s ~/bin/b ~/bin/$symname
+    echo "Created symlink $symname."
+    echo "Press any button to exit."
+    read -ren1
+    exit
+}
+function fremsymlink {
+    echo "###"
+    echo "WARNING: THIS WILL REMOVE ANY FILE IN THE USER BIN DIRECTORY, EVEN IF IT'S NOT A SYMLINK. USE THIS WISELY."
+    echo "Type in the name of the symlink you want to remove:"
+    read -re delsymname
+    echo "Are you SURE that you want to remove $delsymname? If yes, type in 'y' (without quotations). If not, type in anything else."
+    read -ren1 dslchoice
+    if [[ $dslchoice != "y" && $dslchoice != "Y" ]]
+    then
+        echo "No changes have been made."
+        exit
+    fi
+    rm -rf ~/bin/$delsymname
+    echo "Done."
+    exit
+}
+# Menu option check. Moved here because of argument checks.
+
+function optioncheck {
+# if we leave an empty string in read, the if statement will error out.
+# instead of forcing it to output errors to /dev/nul, we use a more elegant solution:
+if [ -z "$option" ]
+then
+    exit
+fi
+
+# parse option.
+if [ "$option" = "del" ]
+then
+    fdel
+fi
+if [ "$option" = "decr" ]
+then
+    fdecr
+fi
+if [ "$option" = "set" ]
+then
+    fset
+fi
+if [ "$option" = "actdel" ]
+then
+    factdel
+fi
+if [ "$option" = "actcreator" ]
+then
+    factnew
+fi
+if [ "$option" = "printact" ]
+then
+    cat ~/.bcount/actlist.txt
+fi
+if [ "$option" = "symlink" ]
+then
+    fsymlink
+fi
+if [ "$option" = "remsymlink" ]
+then
+    fremsymlink
+fi
+}
+
+# Argument parsing
+
+# Argument checks are done by a function. You'll see why in a second.
+
+function acheck {
+    optioncheck
+    mainmenu
+}
+
+# Bash dislikes string comparisons with empty strings.
+# We have to check if the $1 variable is empty before the arg checks, or it will throw up a bunch of errors.
+
+if [ ! -z "$1" ]
+then
+    option="$1"
+    acheck
+fi
+
 # CHECKS
 
 # check if count.txt exists.
@@ -135,15 +225,13 @@ then
     fi
 fi
 
-# CHECKS
-
 # check if actlist.txt exists.
 if [ ! -f ~/.bcount/actlist.txt ]; then
     echo "Activity list not found! Make sure you ran boredbutton (b) at least once."
     exit
 fi
 
-# check if count.txt if readable.
+# check if actlist.txt if readable.
 if [ ! -r ~/.bcount/actlist.txt ]
 then
     echo "Activity list data is not readable. Attempting to fix..."
@@ -186,7 +274,8 @@ then
 fi
 
 # print current count.
-
+function mainmenu {
+clear
 echo "You used the 'I'm bored' button $ccount times."
 echo "### Counter options ###"
 echo "If you want to remove counter data, type 'del' (without quotations). "
@@ -197,39 +286,22 @@ echo "If you want to clear all activity data, type 'actdel' (without quotations)
 echo "If you want to create a new activity, use the Activity Creation Wizard by typing 'actcreator' (without quotations)."
 echo "If you want to print out all activities, type in 'printact' (without quotations)."
 echo "### Miscellaneous ###"
+echo "To create an alternative link (symlink) to boredbutton, type 'symlink' (without quotations)."
+echo "To remove a symlink, type 'remsymlink' (without quotations)."
 echo "To exit, type anything else or just press Enter."
-read -r option
+read -re option
+optioncheck
+}
 
-# if we leave an empty string in read, the if statement will error out.
-# instead of forcing it to output errors to /dev/nul, we use a more elegant solution:
-if [ -z "$option" ]
+# Init main menu.
+mainmenu
+# If no option is chosen, the script goes here.
+nooption=1
+# This if puts the user in the main menu if the $1 argument was invalid.
+if [ -z $1 ]
 then
     exit
-fi
-
-# parse option.
-if [ "$option" = "del" ]
-then
-    fdel
-fi
-if [ "$option" = "decr" ]
-then
-    fdecr
-fi
-if [ "$option" = "set" ]
-then
-    fset
-fi
-if [ "$option" = "actdel" ]
-then
-    factdel
-fi
-if [ "$option" = "actcreator" ]
-then
-    factnew
-fi
-if [ "$option" = "printact" ]
-then
-    cat ~/.bcount/actlist.txt
+else
+    mainmenu
 fi
 exit
