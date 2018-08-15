@@ -10,5 +10,7 @@ Run ``b`` in the terminal. It's that simple!
 ## What does ``bread`` do?
 ``bread`` is an utility that allows you to monitor your "I'm bored" button, as well as make various modifications to it.
 ## To do
-- Double check if the write succeded in ``bread`` functions (it already checks if file is writeable)
-- Symlink option in ``bread``
+- Add more activities
+- Improve ``bread``'s interface
+- Clean up the code
+- Improve the option picker in ``bread`` (so I don't have to use ``if [ "$option" = "x" ]`` statements)
