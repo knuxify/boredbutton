@@ -3,6 +3,15 @@
 # bread is a complimentary utility for b (boredbutton). 
 # please put b in your bin if you haven't already.
 
+# Color variables
+white='\033[1;37m'
+error='\033[0;31m'
+warn='\033[1;33m'
+echo -e "$white"
+# Activity list location:
+homedir=~/
+filename="$homedir.bcount/actlist.txt"
+
 # Some checks were moved to functions.
 function fdel {
     rm -rf ~/.bcount/count.txt
@@ -24,7 +33,7 @@ function fset {
     re='^[0-9]+$'
     if ! [[ $newval =~ $re ]]
     then
-        echo "Not a number! Please restart bread and input a valid number."
+        echo -e "${error}[ERROR]${white} Not a number! Please restart bread and input a valid number."
         exit
     fi
     echo "$newval" > ~/.bcount/count.txt
@@ -66,7 +75,7 @@ do
     fi
     done < "$filename"
     idcount="${currentid:2}"
-    echo "Done."
+    echo "Done. $idcount"
     clear
     echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     echo "Welcome to the Activity Creation Wizard."
@@ -86,8 +95,8 @@ do
     read -ren1
     let idcount++
     echo "ID$idcount" >> ~/.bcount/actlist.txt
-    echo "$newactname" >> ~/.bcount/actlist.txt
-    echo "$newactdesc" >> ~/.bcount/actlist.txt
+    echo "name=$newactname" >> ~/.bcount/actlist.txt
+    echo "desc=$newactdesc" >> ~/.bcount/actlist.txt
     clear
     echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     echo "Done! Your new activity has been added."
@@ -108,10 +117,10 @@ function fsymlink {
 }
 function fremsymlink {
     echo "###"
-    echo "WARNING: THIS WILL REMOVE ANY FILE IN THE USER BIN DIRECTORY, EVEN IF IT'S NOT A SYMLINK. USE THIS WISELY."
-    echo "Type in the name of the symlink you want to remove:"
+    echo -e "${warn}WARNING: THIS WILL REMOVE ANY FILE IN THE USER BIN DIRECTORY, EVEN IF IT'S NOT A SYMLINK. USE THIS WISELY."
+    echo -e "${white}Type in the name of the symlink you want to remove:"
     read -re delsymname
-    echo "Are you SURE that you want to remove $delsymname? If yes, type in 'y' (without quotations). If not, type in anything else."
+    echo -e "Are you ${warn}SURE${white} that you want to remove $delsymname? If yes, type in 'y' (without quotations). If not, type in anything else."
     read -ren1 dslchoice
     if [[ $dslchoice != "y" && $dslchoice != "Y" ]]
     then
@@ -149,7 +158,7 @@ if [ "$option" = "actdel" ]
 then
     factdel
 fi
-if [ "$option" = "actcreator" ]
+if [ "$option" = "actcreator" ] || [ "$option" = "actc" ]
 then
     factnew
 fi
@@ -189,21 +198,21 @@ fi
 
 # check if count.txt exists.
 if [ ! -f ~/.bcount/count.txt ]; then
-    echo "Counter data not found! Are you sure you have boredbutton?"
+    echo -e "${error}[ERROR]${white} Counter data not found! Are you sure you have boredbutton?"
     exit
 fi
 
 # check if count.txt if readable.
 if [ ! -r ~/.bcount/count.txt ]
 then
-    echo "Counter data is not readable. Attempting to fix..."
+    echo -e "${error}[ERROR]${white} Counter data is not readable. Attempting to fix..."
     chmod 777 ~/.bcount/count.txt
     if [ ! -r ~/.bcount/count.txt ]
     then
         sudo chmod 777 ~/.bcount/count.txt
         if [ ! -r ~/.bcount/count.txt ]
         then
-            echo "Could not make count.txt readable."
+            echo -e "${error}[CRITICAL]${white}Could not make counter data readable."
             exit
         fi
     fi
@@ -212,14 +221,14 @@ fi
 # check if count.txt is writeable.
 if [ ! -w ~/.bcount/count.txt ]
 then
-    echo "Counter data not is not writeable. Attempting to fix..."
+    echo -e "${error}[ERROR]${white} Counter data not is not writeable. Attempting to fix..."
     chmod 777 ~/.bcount/count.txt
     if [ ! -w ~/.bcount/count.txt ]
     then
         sudo chmod 777 ~/.bcount/count.txt
         if [ ! -w ~/.bcount/count.txt ]
         then
-            echo "Could not make count.txt writeable."
+            echo -e "${error}[CRITICAL]${white} Could not make counter data writeable."
             exit
         fi
     fi
@@ -227,21 +236,21 @@ fi
 
 # check if actlist.txt exists.
 if [ ! -f ~/.bcount/actlist.txt ]; then
-    echo "Activity list not found! Make sure you ran boredbutton (b) at least once."
+    echo -e "${error}[ERROR]${white} Activity list not found! Make sure you ran boredbutton (b) at least once."
     exit
 fi
 
 # check if actlist.txt if readable.
 if [ ! -r ~/.bcount/actlist.txt ]
 then
-    echo "Activity list data is not readable. Attempting to fix..."
+    echo -e "${error}[ERROR]${white} Activity list data is not readable. Attempting to fix..."
     chmod 777 ~/.bcount/actlist.txt
     if [ ! -r ~/.bcount/actlist.txt ]
     then
         sudo chmod 777 ~/.bcount/actlist.txt
         if [ ! -r ~/.bcount/actlist.txt ]
         then
-            echo "Could not make actlist.txt readable."
+            echo -e "${error}[CRITICAL]${white} Could not make activity list data readable."
             exit
         fi
     fi
@@ -250,14 +259,14 @@ fi
 # check if actlist.txt is writeable.
 if [ ! -w ~/.bcount/actlist.txt ]
 then
-    echo "The activity list is not writeable. Attempting to fix..."
+    echo -e "${error}[ERROR]${white} The activity list is not writeable. Attempting to fix..."
     chmod 777 ~/.bcount/actlist.txt
     if [ ! -w ~/.bcount/actlist.txt ]
     then
         sudo chmod 777 ~/.bcount/actlist.txt
         if [ ! -w ~/.bcount/actlist.txt ]
         then
-            echo "Could not make actlist.txt writeable."
+            echo -e "${error}[CRITICAL]${white} Could not make actlist.txt writeable."
             exit
         fi
     fi
@@ -269,26 +278,26 @@ ccount=$(<~/.bcount/count.txt)
 # check if the counter isn't empty.
 if [ -z $ccount ]
 then
-    echo "Counter data empty! Are you sure you ran boredbutton (b)?"
+    echo -e "${error}[ERROR]${white} Counter data empty! Are you sure you ran boredbutton (b)?"
     exit
 fi
 
 # print current count.
 function mainmenu {
 clear
-echo "You used the 'I'm bored' button $ccount times."
-echo "### Counter options ###"
-echo "If you want to remove counter data, type 'del' (without quotations). "
-echo "If you want to decrease the counter by 1, type 'decr' (without quotations)."
-echo "If you want to set the counter to a certain value, type 'set' (without quotations)."
-echo "### Activity options ###"
-echo "If you want to clear all activity data, type 'actdel' (without quotations)."
-echo "If you want to create a new activity, use the Activity Creation Wizard by typing 'actcreator' (without quotations)."
-echo "If you want to print out all activities, type in 'printact' (without quotations)."
-echo "### Miscellaneous ###"
-echo "To create an alternative link (symlink) to boredbutton, type 'symlink' (without quotations)."
-echo "To remove a symlink, type 'remsymlink' (without quotations)."
-echo "To exit, type anything else or just press Enter."
+echo -e "You used the 'I'm bored' button ${warn}$ccount${white} times."
+echo -e "${warn}### Counter options ###${white}"
+echo -e "If you want to remove counter data, type '${warn}del${white}' (without quotations). "
+echo -e "If you want to decrease the counter by 1, type '${warn}decr${white}' (without quotations)."
+echo -e "If you want to set the counter to a certain value, type '${warn}set${white}' (without quotations)."
+echo -e "${warn}### Activity options ###${white}"
+echo -e "If you want to clear all activity data, type '${warn}actdel${white}' (without quotations)."
+echo -e "If you want to create a new activity, use the Activity Creation Wizard by typing '${warn}actcreator${white}' or '${warn}actc${white}' (without quotations)."
+echo -e "If you want to print out all activities, type in '${warn}printact${white}' (without quotations)."
+echo -e "${warn}### Miscellaneous ###${white}"
+echo -e "To create an alternative link (symlink) to boredbutton, type '${warn}symlink${white}' (without quotations)."
+echo -e "To remove a symlink, type '${warn}remsymlink${white}' (without quotations)."
+echo -e "To exit, type anything else or just press Enter."
 read -re option
 optioncheck
 }
