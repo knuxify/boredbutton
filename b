@@ -195,6 +195,7 @@ rnamelenght=${#readablename}
 rdesclenght=${#readabledesc}
 
 # Output everything.
+echo -e "${warn}###${white}"
 echo -e "${white}So you're bored, right? How about you:"
 echo "${!readablename:$rnamelenght}"
 echo "${!readabledesc:$rdesclenght}"

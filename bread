@@ -7,26 +7,36 @@
 white='\033[1;37m'
 error='\033[0;31m'
 warn='\033[1;33m'
+menuname='\033[1;32m'
+
 echo -e "$white"
+
 # Activity list location:
 homedir=~/
 filename="$homedir.bcount/actlist.txt"
 
 # Some checks were moved to functions.
 function fdel {
+    clear
+    echo -e "${warn}### Delete counter data###${white}"
     rm -rf ~/.bcount/count.txt
-    echo "Done."
+    echo "0" > ~/.bcount/count.txt
+    echo -e "Done!"
     exit
 }
 
 function fdecr {
+    clear
+    echo -e "${warn}### Decrease counter value ###${white}"
     let ccount--
     echo "$ccount" > ~/.bcount/count.txt
+    echo -e "The current count is now ${warn}$ccount${white}."
     exit
 }
 
 function fset {
-    echo "###"
+    clear
+    echo -e "${warn}### Set counter value ###${white}"
     echo "Input value: (Must be a valid number!)"
     read -re newval
     # prevent the user from inputing an invalid value.
@@ -37,22 +47,25 @@ function fset {
         exit
     fi
     echo "$newval" > ~/.bcount/count.txt
-    echo "Done!"
+    echo -e "Changed the count to ${warn}$newval${white}!"
     exit
 }
 function factdel {
+    clear
+    echo -e "${warn}### Delete the activity list ###${white}"
     rm -rf ~/.bcount/actlist.txt
-    echo "Done."
+    echo -e "Done! Please restore the activity list by running ${warn}b${white}."
     exit
 }
 function factnew {
-    echo "###"
+    clear
+    echo -e "${warn}### New activity ###${white}"
     echo "Checking for existing activities..."
-varname="name"
-vardesc="desc"
-currentid="0"
-while read -re line
-do
+    varname="name"
+    vardesc="desc"
+    currentid="0"
+    while read -re line
+    do
     if [[ $line == ID* ]]
     then
         currentid=$line
@@ -75,62 +88,61 @@ do
     fi
     done < "$filename"
     idcount="${currentid:2}"
-    echo "Done. $idcount"
+    echo "Done!"
     clear
-    echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    echo -e "${warn}### Create a new activity ###${white}"
     echo "Welcome to the Activity Creation Wizard."
     echo "Please type in the activity you want to add, for example, 'Write a script'. This is going to appear after 'How about you...', so make sure it fits."
     read -re newactname
     clear
-    echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-    echo "Done!"
+    echo -e "${warn}### Create a new activity ###${white}"
+    echo -e "${warn}Done!${white}"
     echo "Now, please type in the activity description, for example, 'Make a cool script that makes your life easier'."
     read -re newactdesc
     clear
-    echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-    echo "A new activity will be added with the following info:"
-    echo "Name: $newactname"
-    echo "Description: $newactdesc"
-    echo "If this is correct, press Enter. If it's not, press Ctrl+C."
+    echo -e "${warn}### Create a new activity ###${white}"
+    echo -e "${warn}A new activity will be added with the following info:${white}"
+    echo -e "Name: ${warn}$newactname${white}"
+    echo -e "Description: ${warn}$newactdesc${white}"
+    echo -e "If this is correct, press ${warn}Enter${white}. If it's not, press ${warn}Ctrl+C${white}."
     read -ren1
     let idcount++
     echo "ID$idcount" >> ~/.bcount/actlist.txt
     echo "name=$newactname" >> ~/.bcount/actlist.txt
     echo "desc=$newactdesc" >> ~/.bcount/actlist.txt
     clear
-    echo "Activity Creation Wizard >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    echo -e "${warn}### Create a new activity ###${white}"
     echo "Done! Your new activity has been added."
-    echo "Press any button to exit."
-    read -ren1
     exit
 }
 
 function fsymlink {
-    echo "###"
+    clear
+    echo -e "${warn}### Create a link ###${white}"
     echo "Type in the symlink name. Please do not type in full paths, just a command that you'll use to invoke boredbutton."
     read -re symname
     ln -s ~/bin/b ~/bin/$symname
-    echo "Created symlink $symname."
-    echo "Press any button to exit."
-    read -ren1
+    echo -e "Created symlink ${warn}$symname${white}."
     exit
 }
 function fremsymlink {
-    echo "###"
+    clear
+    echo -e "${warn}### Remove a link ###${white}"
     echo -e "${warn}WARNING: THIS WILL REMOVE ANY FILE IN THE USER BIN DIRECTORY, EVEN IF IT'S NOT A SYMLINK. USE THIS WISELY."
     echo -e "${white}Type in the name of the symlink you want to remove:"
-    read -re delsymname
-    echo -e "Are you ${warn}SURE${white} that you want to remove $delsymname? If yes, type in 'y' (without quotations). If not, type in anything else."
+    read -re dslname
+    echo -e "Are you ${warn}SURE${white} that you want to remove ${warn}$delsymname${white}? If yes, type in 'y' (without quotations). If not, type in anything else."
     read -ren1 dslchoice
     if [[ $dslchoice != "y" && $dslchoice != "Y" ]]
     then
         echo "No changes have been made."
         exit
     fi
-    rm -rf ~/bin/$delsymname
-    echo "Done."
+    rm -rf ~/bin/$dslname
+    echo -e "Removed symlink ${warn}$dslname${white}."
     exit
 }
+
 # Menu option check. Moved here because of argument checks.
 
 function optioncheck {
@@ -286,18 +298,21 @@ fi
 function mainmenu {
 clear
 echo -e "You used the 'I'm bored' button ${warn}$ccount${white} times."
-echo -e "${warn}### Counter options ###${white}"
-echo -e "If you want to remove counter data, type '${warn}del${white}' (without quotations). "
-echo -e "If you want to decrease the counter by 1, type '${warn}decr${white}' (without quotations)."
-echo -e "If you want to set the counter to a certain value, type '${warn}set${white}' (without quotations)."
-echo -e "${warn}### Activity options ###${white}"
-echo -e "If you want to clear all activity data, type '${warn}actdel${white}' (without quotations)."
-echo -e "If you want to create a new activity, use the Activity Creation Wizard by typing '${warn}actcreator${white}' or '${warn}actc${white}' (without quotations)."
-echo -e "If you want to print out all activities, type in '${warn}printact${white}' (without quotations)."
-echo -e "${warn}### Miscellaneous ###${white}"
-echo -e "To create an alternative link (symlink) to boredbutton, type '${warn}symlink${white}' (without quotations)."
-echo -e "To remove a symlink, type '${warn}remsymlink${white}' (without quotations)."
+echo -e "${menuname}### Counter options ###${white}"
+echo -e "If you want to remove counter data, type '${warn}del${white}'."
+echo -e "If you want to decrease the counter by 1, type '${warn}decr${white}'."
+echo -e "If you want to set the counter to a certain value, type '${warn}set${white}'."
+echo -e "${menuname}### Activity options ###${white}"
+echo -e "If you want to clear all activity data, type '${warn}actdel${white}'."
+echo -e "If you want to create a new activity, use the Activity Creation Wizard by typing '${warn}actcreator${white}' or '${warn}actc${white}'."
+echo -e "If you want to print out all activities, type in '${warn}printact${white}'."
+echo -e "${menuname}### Miscellaneous ###${white}"
+echo -e "To create an alternative link (symlink) to boredbutton, type '${warn}symlink${white}'."
+echo -e "To remove a symlink, type '${warn}remsymlink${white}'."
 echo -e "To exit, type anything else or just press Enter."
+echo -e "${warn}Note:${white} Ignore the quotations while typing in commands."
+echo -e "${menuname}######################${white}"
+
 read -re option
 optioncheck
 }
