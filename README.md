@@ -11,6 +11,5 @@ Run ``b`` in the terminal. It's that simple!
 ``bread`` is an utility that allows you to monitor your "I'm bored" button, as well as make various modifications to it.
 ## To do
 - Add more activities
-- Improve ``bread``'s interface
 - Clean up the code
 - Improve the option picker in ``bread`` (so I don't have to use ``if [ "$option" = "x" ]`` statements)
