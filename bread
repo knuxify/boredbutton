@@ -11,6 +11,95 @@ menuname='\033[1;32m'
 
 echo -e "$white"
 
+# CHECKS
+
+# check if count.txt exists.
+if [ ! -f ~/.bcount/count.txt ]; then
+    echo -e "${error}[ERROR]${white} Counter data not found! Are you sure you have boredbutton?"
+    exit
+fi
+
+# check if count.txt if readable.
+if [ ! -r ~/.bcount/count.txt ]
+then
+    echo -e "${error}[ERROR]${white} Counter data is not readable. Attempting to fix..."
+    chmod 777 ~/.bcount/count.txt
+    if [ ! -r ~/.bcount/count.txt ]
+    then
+        sudo chmod 777 ~/.bcount/count.txt
+        if [ ! -r ~/.bcount/count.txt ]
+        then
+            echo -e "${error}[CRITICAL]${white}Could not make counter data readable."
+            exit
+        fi
+    fi
+fi
+
+# check if count.txt is writeable.
+if [ ! -w ~/.bcount/count.txt ]
+then
+    echo -e "${error}[ERROR]${white} Counter data not is not writeable. Attempting to fix..."
+    chmod 777 ~/.bcount/count.txt
+    if [ ! -w ~/.bcount/count.txt ]
+    then
+        sudo chmod 777 ~/.bcount/count.txt
+        if [ ! -w ~/.bcount/count.txt ]
+        then
+            echo -e "${error}[CRITICAL]${white} Could not make counter data writeable."
+            exit
+        fi
+    fi
+fi
+
+# check if actlist.txt exists.
+if [ ! -f ~/.bcount/actlist.txt ]; then
+    echo -e "${error}[ERROR]${white} Activity list not found! Make sure you ran boredbutton (b) at least once."
+    exit
+fi
+
+# check if actlist.txt if readable.
+if [ ! -r ~/.bcount/actlist.txt ]
+then
+    echo -e "${error}[ERROR]${white} Activity list data is not readable. Attempting to fix..."
+    chmod 777 ~/.bcount/actlist.txt
+    if [ ! -r ~/.bcount/actlist.txt ]
+    then
+        sudo chmod 777 ~/.bcount/actlist.txt
+        if [ ! -r ~/.bcount/actlist.txt ]
+        then
+            echo -e "${error}[CRITICAL]${white} Could not make activity list data readable."
+            exit
+        fi
+    fi
+fi
+
+# check if actlist.txt is writeable.
+if [ ! -w ~/.bcount/actlist.txt ]
+then
+    echo -e "${error}[ERROR]${white} The activity list is not writeable. Attempting to fix..."
+    chmod 777 ~/.bcount/actlist.txt
+    if [ ! -w ~/.bcount/actlist.txt ]
+    then
+        sudo chmod 777 ~/.bcount/actlist.txt
+        if [ ! -w ~/.bcount/actlist.txt ]
+        then
+            echo -e "${error}[CRITICAL]${white} Could not make actlist.txt writeable."
+            exit
+        fi
+    fi
+fi
+
+# load current count
+ccount=$(<~/.bcount/count.txt)
+
+# check if the counter isn't empty.
+if [ -z $ccount ]
+then
+    echo -e "${error}[ERROR]${white} Counter data empty! Are you sure you ran boredbutton (b)?"
+    exit
+fi
+
+
 # Activity list location:
 homedir=~/
 filename="$homedir.bcount/actlist.txt"
@@ -177,6 +266,7 @@ fi
 if [ "$option" = "printact" ]
 then
     cat ~/.bcount/actlist.txt
+    exit
 fi
 if [ "$option" = "symlink" ]
 then
@@ -206,95 +296,8 @@ then
     acheck
 fi
 
-# CHECKS
 
-# check if count.txt exists.
-if [ ! -f ~/.bcount/count.txt ]; then
-    echo -e "${error}[ERROR]${white} Counter data not found! Are you sure you have boredbutton?"
-    exit
-fi
-
-# check if count.txt if readable.
-if [ ! -r ~/.bcount/count.txt ]
-then
-    echo -e "${error}[ERROR]${white} Counter data is not readable. Attempting to fix..."
-    chmod 777 ~/.bcount/count.txt
-    if [ ! -r ~/.bcount/count.txt ]
-    then
-        sudo chmod 777 ~/.bcount/count.txt
-        if [ ! -r ~/.bcount/count.txt ]
-        then
-            echo -e "${error}[CRITICAL]${white}Could not make counter data readable."
-            exit
-        fi
-    fi
-fi
-
-# check if count.txt is writeable.
-if [ ! -w ~/.bcount/count.txt ]
-then
-    echo -e "${error}[ERROR]${white} Counter data not is not writeable. Attempting to fix..."
-    chmod 777 ~/.bcount/count.txt
-    if [ ! -w ~/.bcount/count.txt ]
-    then
-        sudo chmod 777 ~/.bcount/count.txt
-        if [ ! -w ~/.bcount/count.txt ]
-        then
-            echo -e "${error}[CRITICAL]${white} Could not make counter data writeable."
-            exit
-        fi
-    fi
-fi
-
-# check if actlist.txt exists.
-if [ ! -f ~/.bcount/actlist.txt ]; then
-    echo -e "${error}[ERROR]${white} Activity list not found! Make sure you ran boredbutton (b) at least once."
-    exit
-fi
-
-# check if actlist.txt if readable.
-if [ ! -r ~/.bcount/actlist.txt ]
-then
-    echo -e "${error}[ERROR]${white} Activity list data is not readable. Attempting to fix..."
-    chmod 777 ~/.bcount/actlist.txt
-    if [ ! -r ~/.bcount/actlist.txt ]
-    then
-        sudo chmod 777 ~/.bcount/actlist.txt
-        if [ ! -r ~/.bcount/actlist.txt ]
-        then
-            echo -e "${error}[CRITICAL]${white} Could not make activity list data readable."
-            exit
-        fi
-    fi
-fi
-
-# check if actlist.txt is writeable.
-if [ ! -w ~/.bcount/actlist.txt ]
-then
-    echo -e "${error}[ERROR]${white} The activity list is not writeable. Attempting to fix..."
-    chmod 777 ~/.bcount/actlist.txt
-    if [ ! -w ~/.bcount/actlist.txt ]
-    then
-        sudo chmod 777 ~/.bcount/actlist.txt
-        if [ ! -w ~/.bcount/actlist.txt ]
-        then
-            echo -e "${error}[CRITICAL]${white} Could not make actlist.txt writeable."
-            exit
-        fi
-    fi
-fi
-
-# load current count
-ccount=$(<~/.bcount/count.txt)
-
-# check if the counter isn't empty.
-if [ -z $ccount ]
-then
-    echo -e "${error}[ERROR]${white} Counter data empty! Are you sure you ran boredbutton (b)?"
-    exit
-fi
-
-# print current count.
+# Main menu count.
 function mainmenu {
 clear
 echo -e "You used the 'I'm bored' button ${warn}$ccount${white} times."
