@@ -9,7 +9,7 @@
 #                           #
 #############################
 # Github: https://github.com/knuxfanwin8/boredbutton
-# Current version: v0.4
+# Current version: v0.6
 # Feel free to fork and modify the code, as long as you don't claim it as your own!
 ###############################
 # Have a good idea for an activity? Post it in an issue in the GitHub repo!

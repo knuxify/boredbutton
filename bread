@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# bread release 0.6
+
 # bread is a complimentary utility for b (boredbutton). 
 # please put b in your bin if you haven't already.
 
@@ -11,8 +13,19 @@ menuname='\033[1;32m'
 
 echo -e "$white"
 
-# CHECKS
+## Load some things
 
+# Activity list location:
+homedir=~/
+filename="$homedir.bcount/actlist.txt"
+
+# Load current count
+ccount=$(<~/.bcount/count.txt)
+
+# Load options
+options=("del" "decr" "set" "actdel" "actnew" "printact" "symlink" "remsymlink")
+
+## Checks
 # check if count.txt exists.
 if [ ! -f ~/.bcount/count.txt ]; then
     echo -e "${error}[ERROR]${white} Counter data not found! Are you sure you have boredbutton?"
@@ -99,12 +112,8 @@ then
     exit
 fi
 
+## Functions
 
-# Activity list location:
-homedir=~/
-filename="$homedir.bcount/actlist.txt"
-
-# Some checks were moved to functions.
 function fdel {
     clear
     echo -e "${warn}### Delete counter data###${white}"
@@ -232,103 +241,50 @@ function fremsymlink {
     exit
 }
 
-# Menu option check. Moved here because of argument checks.
-
-function optioncheck {
-# if we leave an empty string in read, the if statement will error out.
-# instead of forcing it to output errors to /dev/nul, we use a more elegant solution:
-if [ -z "$option" ]
+## Argument parsing
+# Argument parsing used to be done with a function and an if statement. Here's a more elegant approach:
+if ! [ -z $1 ]
 then
-    exit
+	lookfor=f$1
+	if [ "$(type -t $lookfor)" = "function" ]
+	then
+		$lookfor
+	fi
 fi
+	
 
-# parse option.
-if [ "$option" = "del" ]
-then
-    fdel
-fi
-if [ "$option" = "decr" ]
-then
-    fdecr
-fi
-if [ "$option" = "set" ]
-then
-    fset
-fi
-if [ "$option" = "actdel" ]
-then
-    factdel
-fi
-if [ "$option" = "actcreator" ] || [ "$option" = "actc" ]
-then
-    factnew
-fi
-if [ "$option" = "printact" ]
-then
-    cat ~/.bcount/actlist.txt
-    exit
-fi
-if [ "$option" = "symlink" ]
-then
-    fsymlink
-fi
-if [ "$option" = "remsymlink" ]
-then
-    fremsymlink
-fi
-}
+## Main menu
 
-# Argument parsing
+while true
+do
+	clear
+	echo -e "You used the 'I'm bored' button ${warn}$ccount${white} times."
+	echo -e "${menuname}### Counter options ###${white}"
+	echo -e "If you want to remove counter data, type '${warn}del${white}'."
+	echo -e "If you want to decrease the counter by 1, type '${warn}decr${white}'."
+	echo -e "If you want to set the counter to a certain value, type '${warn}set${white}'."
+	echo -e "${menuname}### Activity options ###${white}"
+	echo -e "If you want to clear all activity data, type '${warn}actdel${white}'."
+	echo -e "If you want to create a new activity, use the Activity Creation Wizard by typing '${warn}actnew${white}'."
+	echo -e "If you want to print out all activities, type in '${warn}printact${white}'."
+	echo -e "${menuname}### Miscellaneous ###${white}"
+	echo -e "To create an alternative link (symlink) to boredbutton, type '${warn}symlink${white}'."
+	echo -e "To remove a symlink, type '${warn}remsymlink${white}'."
+	echo -e "To exit, type anything else or just press Enter."
+	echo -e "${warn}Note:${white} Ignore the quotations while typing in commands."
+	echo -e "${menuname}######################${white}"
 
-# Argument checks are done by a function. You'll see why in a second.
-
-function acheck {
-    optioncheck
-    mainmenu
-}
-
-# Bash dislikes string comparisons with empty strings.
-# We have to check if the $1 variable is empty before the arg checks, or it will throw up a bunch of errors.
-
-if [ ! -z "$1" ]
-then
-    option="$1"
-    acheck
-fi
-
-
-# Main menu count.
-function mainmenu {
-clear
-echo -e "You used the 'I'm bored' button ${warn}$ccount${white} times."
-echo -e "${menuname}### Counter options ###${white}"
-echo -e "If you want to remove counter data, type '${warn}del${white}'."
-echo -e "If you want to decrease the counter by 1, type '${warn}decr${white}'."
-echo -e "If you want to set the counter to a certain value, type '${warn}set${white}'."
-echo -e "${menuname}### Activity options ###${white}"
-echo -e "If you want to clear all activity data, type '${warn}actdel${white}'."
-echo -e "If you want to create a new activity, use the Activity Creation Wizard by typing '${warn}actcreator${white}' or '${warn}actc${white}'."
-echo -e "If you want to print out all activities, type in '${warn}printact${white}'."
-echo -e "${menuname}### Miscellaneous ###${white}"
-echo -e "To create an alternative link (symlink) to boredbutton, type '${warn}symlink${white}'."
-echo -e "To remove a symlink, type '${warn}remsymlink${white}'."
-echo -e "To exit, type anything else or just press Enter."
-echo -e "${warn}Note:${white} Ignore the quotations while typing in commands."
-echo -e "${menuname}######################${white}"
-
-read -re option
-optioncheck
-}
-
-# Init main menu.
-mainmenu
-# If no option is chosen, the script goes here.
-nooption=1
-# This if puts the user in the main menu if the $1 argument was invalid.
-if [ -z $1 ]
-then
-    exit
-else
-    mainmenu
-fi
-exit
+	read -re choice
+	lookfor=f$choice
+	if ! [ -z $choice ]
+	then
+    	if [ "$(type -t $lookfor)" = "function" ]
+    	then
+        	$lookfor
+		else
+			exit
+    	fi
+	else
+		exit
+	fi
+done
