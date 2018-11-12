@@ -1,4 +1,4 @@
-# boredbutton
+# boredbutton v0.7
 An "I'm bored" button, made in bash. Comes with cool utilities.
 ## Why would I need it?
 You know when you get bored? This button keeps track of how much times you are bored. It also shows you some activity suggestions, and you can add your own. (If you have a good idea for an activity that should be added as a default one, feel free to send an issue.)
@@ -9,7 +9,3 @@ You know when you get bored? This button keeps track of how much times you are b
 Run ``b`` in the terminal. It's that simple! 
 ## What does ``bread`` do?
 ``bread`` is an utility that allows you to monitor your "I'm bored" button, as well as make various modifications to it.
-## To do
-- Add more activities
-- Clean up the code
-- Improve the option picker in ``bread`` (so I don't have to use ``if [ "$option" = "x" ]`` statements)
