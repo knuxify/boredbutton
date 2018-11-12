@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# bread release 0.6
+# bread release 0.7
 
 # bread is a complimentary utility for b (boredbutton). 
 # please put b in your bin if you haven't already.
@@ -26,91 +26,61 @@ ccount=$(<~/.bcount/count.txt)
 options=("del" "decr" "set" "actdel" "actnew" "printact" "symlink" "remsymlink")
 
 ## Checks
-# check if count.txt exists.
-if [ ! -f ~/.bcount/count.txt ]; then
-    echo -e "${error}[ERROR]${white} Counter data not found! Are you sure you have boredbutton?"
-    exit
+# Check if count.txt exists.
+if [ ! -f "$homedir.bcount/count.txt" ]; then
+    echo "0" > ~/.bcount/count.txt
+    ccount=$(<~/.bcount/count.txt)
+else
+    # load current count
+    ccount=$(<~/.bcount/count.txt)
 fi
 
-# check if count.txt if readable.
-if [ ! -r ~/.bcount/count.txt ]
+# Counter data read test
+
+function readtest {
+if [ ! -r "$homedir.bcount/count.txt" ] || [ ! -w "$homedir.bcount/count.txt" ]
 then
-    echo -e "${error}[ERROR]${white} Counter data is not readable. Attempting to fix..."
+    echo -e "${white}Fixing counter data..."
     chmod 777 ~/.bcount/count.txt
-    if [ ! -r ~/.bcount/count.txt ]
+    if [ ! -r "$homedir.bcount/count.txt" ] || [ ! -w "$homedir.bcount/count.txt" ]
     then
         sudo chmod 777 ~/.bcount/count.txt
-        if [ ! -r ~/.bcount/count.txt ]
+        if [ ! -r "$homedir.bcount/count.txt" ] || [ ! -w "$homedir.bcount/count.txt" ]
         then
-            echo -e "${error}[CRITICAL]${white}Could not make counter data readable."
+            echo -e "${error}[CRITICAL ERROR]${white} Could not fix counter data."
             exit
         fi
     fi
 fi
+}
 
-# check if count.txt is writeable.
-if [ ! -w ~/.bcount/count.txt ]
-then
-    echo -e "${error}[ERROR]${white} Counter data not is not writeable. Attempting to fix..."
-    chmod 777 ~/.bcount/count.txt
-    if [ ! -w ~/.bcount/count.txt ]
-    then
-        sudo chmod 777 ~/.bcount/count.txt
-        if [ ! -w ~/.bcount/count.txt ]
-        then
-            echo -e "${error}[CRITICAL]${white} Could not make counter data writeable."
-            exit
-        fi
-    fi
-fi
+# Activity list read test
 
+function actreadtest {
 # check if actlist.txt exists.
-if [ ! -f ~/.bcount/actlist.txt ]; then
+if [ ! -f "$homedir.bcount/actlist.txt" ]; then
     echo -e "${error}[ERROR]${white} Activity list not found! Make sure you ran boredbutton (b) at least once."
     exit
 fi
-
-# check if actlist.txt if readable.
-if [ ! -r ~/.bcount/actlist.txt ]
+if [ ! -r "$homedir.bcount/actlist.txt" ] || [ ! -w "$homedir.bcount/actlist.txt" ]
 then
-    echo -e "${error}[ERROR]${white} Activity list data is not readable. Attempting to fix..."
+    echo -e "${white}Fixing activity data..."
     chmod 777 ~/.bcount/actlist.txt
-    if [ ! -r ~/.bcount/actlist.txt ]
+    if [ ! -r "$homedir.bcount/actlist.txt" ] || [ ! -w "$homedir.bcount/actlist.txt" ]
     then
         sudo chmod 777 ~/.bcount/actlist.txt
-        if [ ! -r ~/.bcount/actlist.txt ]
+        if [ ! -r "$homedir.bcount/actlist.txt" ] || [ ! -w "$homedir.bcount/actlist.txt" ]
         then
-            echo -e "${error}[CRITICAL]${white} Could not make activity list data readable."
+            echo -e "${error}[CRITICAL ERROR]${white} Could not fix activity data."
             exit
         fi
     fi
 fi
+}
 
-# check if actlist.txt is writeable.
-if [ ! -w ~/.bcount/actlist.txt ]
-then
-    echo -e "${error}[ERROR]${white} The activity list is not writeable. Attempting to fix..."
-    chmod 777 ~/.bcount/actlist.txt
-    if [ ! -w ~/.bcount/actlist.txt ]
-    then
-        sudo chmod 777 ~/.bcount/actlist.txt
-        if [ ! -w ~/.bcount/actlist.txt ]
-        then
-            echo -e "${error}[CRITICAL]${white} Could not make actlist.txt writeable."
-            exit
-        fi
-    fi
-fi
-
-# load current count
-ccount=$(<~/.bcount/count.txt)
-
-# check if the counter isn't empty.
-if [ -z $ccount ]
-then
-    echo -e "${error}[ERROR]${white} Counter data empty! Are you sure you ran boredbutton (b)?"
-    exit
-fi
+# Perform tests.
+readtest
+actreadtest
 
 ## Functions
 
@@ -214,33 +184,6 @@ function factnew {
     exit
 }
 
-function fsymlink {
-    clear
-    echo -e "${warn}### Create a link ###${white}"
-    echo "Type in the symlink name. Please do not type in full paths, just a command that you'll use to invoke boredbutton."
-    read -re symname
-    ln -s ~/bin/b ~/bin/$symname
-    echo -e "Created symlink ${warn}$symname${white}."
-    exit
-}
-function fremsymlink {
-    clear
-    echo -e "${warn}### Remove a link ###${white}"
-    echo -e "${warn}WARNING: THIS WILL REMOVE ANY FILE IN THE USER BIN DIRECTORY, EVEN IF IT'S NOT A SYMLINK. USE THIS WISELY."
-    echo -e "${white}Type in the name of the symlink you want to remove:"
-    read -re dslname
-    echo -e "Are you ${warn}SURE${white} that you want to remove ${warn}$delsymname${white}? If yes, type in 'y' (without quotations). If not, type in anything else."
-    read -ren1 dslchoice
-    if [[ $dslchoice != "y" && $dslchoice != "Y" ]]
-    then
-        echo "No changes have been made."
-        exit
-    fi
-    rm -rf ~/bin/$dslname
-    echo -e "Removed symlink ${warn}$dslname${white}."
-    exit
-}
-
 ## Argument parsing
 # Argument parsing used to be done with a function and an if statement. Here's a more elegant approach:
 if ! [ -z $1 ]
@@ -259,20 +202,18 @@ while true
 do
 	clear
 	echo -e "You used the 'I'm bored' button ${warn}$ccount${white} times."
-	echo -e "${menuname}### Counter options ###${white}"
-	echo -e "If you want to remove counter data, type '${warn}del${white}'."
-	echo -e "If you want to decrease the counter by 1, type '${warn}decr${white}'."
-	echo -e "If you want to set the counter to a certain value, type '${warn}set${white}'."
-	echo -e "${menuname}### Activity options ###${white}"
-	echo -e "If you want to clear all activity data, type '${warn}actdel${white}'."
-	echo -e "If you want to create a new activity, use the Activity Creation Wizard by typing '${warn}actnew${white}'."
-	echo -e "If you want to print out all activities, type in '${warn}printact${white}'."
-	echo -e "${menuname}### Miscellaneous ###${white}"
-	echo -e "To create an alternative link (symlink) to boredbutton, type '${warn}symlink${white}'."
-	echo -e "To remove a symlink, type '${warn}remsymlink${white}'."
+	echo -e "\n${menuname}### Counter options ###${white}\n"
+	echo -e "${menuname}Remove counter data${white} - ${warn}del${white}."
+	echo -e "${menuname}Decrease counter by 1${white} - ${warn}decr${white}."
+	echo -e "${menuname}Set counter value${white} - ${warn}set${white}."
+	echo -e "\n${menuname}### Activity options ###${white}\n"
+	echo -e "${menuname}Remove activity data${white} - ${warn}actdel${white}."
+	echo -e "${menuname}Create a new activity${white} - ${warn}actnew${white}."
+	echo -e "${menuname}Print all activities${white} - ${warn}printact${white}."
+    echo -e "\n${menuname}Note: ${white}To recreate activity data, run ${warn}b${white}."
+    echo -e "\n${menuname}### Exit ###${white}\n"
 	echo -e "To exit, type anything else or just press Enter."
-	echo -e "${warn}Note:${white} Ignore the quotations while typing in commands."
-	echo -e "${menuname}######################${white}"
+	echo -e "\n${menuname}######################${white}"
 
 	read -re choice
 	lookfor=f$choice
