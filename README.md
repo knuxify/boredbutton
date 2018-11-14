@@ -1,4 +1,4 @@
-# boredbutton v0.7
+# boredbutton v1.0
 An "I'm bored" button, made in bash. Comes with cool utilities.
 ## Why would I need it?
 You know when you get bored? This button keeps track of how much times you are bored. It also shows you some activity suggestions, and you can add your own. (If you have a good idea for an activity that should be added as a default one, feel free to send an issue.)
