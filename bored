@@ -1,0 +1,63 @@
+#!/bin/bash
+
+#############################
+#    ____________________   #
+#   /    boredbutton    /|  #
+#  /   by knuxfanwin8  / |  #
+#  \  ################ \ |  #
+#   \___________________\|  #
+#                           #
+#############################
+# Github: https://github.com/knuxfanwin8/boredbutton
+# Current version:
+version="v1.0 (rewrite)"
+# Feel free to fork and modify the code, as long as you don't claim it as your own!
+###############################
+# Have a good idea for an activity? Post it in an issue in the GitHub repo!
+# Want to improve the code? Fork the repo, and make a pull request!
+###############################
+
+# Colors
+white='\033[1;37m'
+error='\033[0;31m'
+warn='\033[1;33m'
+menuname='\033[1;32m'
+randomcolor="\033[38;5;$(awk -v min=20 -v max=231 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')m"
+
+# Variables
+homedir=~/
+arg=$1
+arg2=$2
+debug="false"
+
+# List location
+list=~/.bored/idealist.txt
+# Counter location
+counterfile=~/.bored/count.txt
+
+# Fetch counter.
+counter="$(cat $counterfile)"
+
+# Debugger
+source ./debugger.sh
+
+# Checks
+source ./checks.sh
+
+# Functions
+source ./functions.sh
+
+# Setup utility
+function setup { 
+    source ./boredsetup.sh
+
+}
+
+# Argument checks
+source ./arguments.sh
+
+# Idea generator
+source ./gen.sh
+
+boreddebug "Done."
+exit

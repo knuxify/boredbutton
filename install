@@ -1,0 +1,14 @@
+#!/bin/bash
+rm -f ~/bin/bored
+rm -f ~/bin/idealist.txt
+cp -f idealist.txt ~/bin/idealist.txt
+while read -r line
+do
+    if [[ $line == source* ]]
+    then
+        cat ${line:7} >> ~/bin/bored
+    else
+        echo "$line" >> ~/bin/bored
+    fi
+done < "bored"
+chmod 755 ~/bin/bored
