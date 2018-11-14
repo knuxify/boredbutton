@@ -49,34 +49,7 @@ function factnew {
     clear
     echo -e "${warn}### New idea ###${white}"
     echo "Checking for existing activities..."
-    varname="name"
-    vardesc="desc"
-    currentid="0"
-    while read -re line
-    do
-    if [[ $line == ID* ]]
-    then
-        currentid=$line
-    else
-        if [[ $line == name=* ]]
-        then
-            line="${line:5}"
-            makeline=$currentid$varname
-            declare "$makeline=$makeline$line"
-        else
-        if [[ $line == desc=* ]]
-        then
-            line="${line:5}"
-            makeline=$currentid$vardesc
-            declare "$makeline=$makeline$line"
-        else
-            echo -e "Invalid line! Ignoring. Line content:\n$line"
-        fi
-        fi
-    fi
-    done < "$filename"
-    idcount="${currentid:2}"
-    echo "Done!"
+    idcount=$(grep -c 'ID' $list)
     clear
     echo -e "${warn}### Create a new idea ###${white}"
     echo "Welcome to the Idea Creation Wizard."
@@ -96,8 +69,8 @@ function factnew {
     read -ren1
     let idcount++
     echo "ID$idcount" >> $list
-    echo "name=$newactname" >> $list
-    echo "desc=$newactdesc" >> $list
+    echo "name='$newactname'" >> $list
+    echo "desc='$newactdesc'" >> $list
     clear
     echo -e "${warn}### Create a new idea ###${white}"
     echo "Done! Your new idea has been added."
