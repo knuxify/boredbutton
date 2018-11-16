@@ -1,11 +1,19 @@
-# boredbutton v1.0
-An "I'm bored" button, made in bash. Comes with cool utilities.
+# boredbutton v1.0.1
+## The ultimate anti-boredom utility.
+![boredbutton](https://awo.oooooooooooooo.ooo/i/nbo2.gif)
 ## Why would I need it?
-You know when you get bored? This button keeps track of how much times you are bored. It also shows you some activity suggestions, and you can add your own. (If you have a good idea for an activity that should be added as a default one, feel free to send an issue.)
+You know when you get bored? This button keeps track of how much times you are bored. It also shows you some ideas for things you could do, and you can add your own. (If you made a cool idea, feel free to send it via a GitHub issue.)
 ## How to install
-1. Download the repo
-2. Unzip the ``b`` and ``bread`` files into your local bin folder (~/bin). If you haven't set up a local bin folder, do it. (note: Ubuntu does this automatically)
+``USING RELEASES``
+1. Grab the newest release from the [Releases page](https://github.com/knuxfanwin8/boredbutton/releases). 
+2. Unzip the release. 
+3. If you haven't set up a local bin folder, do it. (note: Ubuntu does this automatically, you just have to make the ~/bin folder yourself)
+4. Open a terminal session in the folder.
+5. Run ``./install``.
+
+``BUILD IT YOURSELF``
+Pretty much the same but you download/clone the repo instead of getting the release.
 ## How to use
-Run ``b`` in the terminal. It's that simple! 
-## What does ``bread`` do?
-``bread`` is an utility that allows you to monitor your "I'm bored" button, as well as make various modifications to it.
+Run ``bored`` in the terminal. It's that simple!
+To access options like the idea creator, counter options (delete, decrease, set) and (soon) package idea lists, run ``bored setup``. 
+
