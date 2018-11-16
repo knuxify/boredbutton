@@ -76,3 +76,6 @@ function factnew {
     echo "Done! Your new idea has been added."
     exit
 }
+function fpack {
+	echo "Not done yet! Should be added in release v1.1."
+}
