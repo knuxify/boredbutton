@@ -1,7 +1,20 @@
 #!/bin/bash
+clear
+echo "BoredInstaller"
+echo "---"
+echo "You are about to install boredbutton."
+echo "It will be saved to "~"/bin/."
+echo "Press any button to continue."
+echo "(Note: this will overwrite your existing installation."
+read -ren1
+clear
+echo "Removing old files..."
 rm -f ~/bin/bored
 rm -f ~/bin/idealist.txt
-cp -f idealist.txt ~/bin/idealist.txt
+echo "Copying idea list..."
+cp -f defaultlist.txt ~/.bored/defaultlist.txt
+cp -f defaultnoid.txt ~/.bored/defaultnoid.txt
+echo "Building the utility..."
 while read -r line
 do
     if [[ $line == source* ]]
@@ -11,4 +24,12 @@ do
         echo "$line" >> ~/bin/bored
     fi
 done < "bored"
+echo "Fix permissions..."
 chmod 755 ~/bin/bored
+echo "Making local bin folder..."
+pathfix="export PATH=$PATH:~/bin"
+grep -q -F '$pathfix' ~/.bashrc || echo '$pathfix' >> ~/.bashrc
+if ! [ -d ~/bin ]; then mkdir ~/bin; fi
+clear
+echo "Done!"
+echo "Run boredbutton using the bored command."
