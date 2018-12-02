@@ -5,12 +5,18 @@ echo "---"
 echo "You are about to install boredbutton."
 echo "It will be saved to "~"/bin/."
 echo "Press any button to continue."
-echo "(Note: this will overwrite your existing installation."
+echo "(Note: this will overwrite your existing installation.)"
 read -ren1
 clear
 echo "Removing old files..."
-rm -f ~/bin/bored
-rm -f ~/bin/idealist.txt
+if [ -e ~/bin/bored ]; then rm -f ~/bin/bored; fi
+if [ -e ~/bin/idealist.txt ]; then rm -f ~/bin/idealist.txt; fi
+if [ -d ~/.bored ]; then rm -rf ~/.bored; fi
+mkdir ~/.bored
+echo "Making local bin folder..."
+pathfix="export PATH=$PATH:~/bin"
+grep -q -F '$pathfix' ~/.bashrc || echo '$pathfix' >> ~/.bashrc
+if ! [ -d ~/bin ]; then mkdir ~/bin; fi
 echo "Copying idea list..."
 cp -f defaultlist.txt ~/.bored/defaultlist.txt
 cp -f defaultnoid.txt ~/.bored/defaultnoid.txt
@@ -26,10 +32,6 @@ do
 done < "bored"
 echo "Fix permissions..."
 chmod 755 ~/bin/bored
-echo "Making local bin folder..."
-pathfix="export PATH=$PATH:~/bin"
-grep -q -F '$pathfix' ~/.bashrc || echo '$pathfix' >> ~/.bashrc
-if ! [ -d ~/bin ]; then mkdir ~/bin; fi
 clear
 echo "Done!"
 echo "Run boredbutton using the bored command."
