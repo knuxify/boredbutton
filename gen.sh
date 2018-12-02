@@ -1,3 +1,7 @@
+# Increase counter by 1.
+let counter++
+echo "$counter" > $counterfile
+boreddebug "$counter saved to $counterfile"
 # Display some info
 echo -e "${white}boredbutton ${warn}$version${white} | do ${menuname}'bored setup'${white} for utilities | you used the button ${warn}$counter${white} times"
 # Generate id count.
@@ -15,7 +19,3 @@ echo -e "${randomcolor}###${white}"
 echo -e "${white}So you're bored, right? How about you:"
 echo -e "${randomcolor}${name}${white}"
 echo "${desc}"
-# Increase counter by 1.
-let counter++
-echo "$counter" > $counterfile
-boreddebug "$counter saved to $counterfile"
