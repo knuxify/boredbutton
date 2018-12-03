@@ -6,20 +6,37 @@ echo "You are about to install boredbutton."
 echo "It will be saved to "~"/bin/."
 echo "Press any button to continue."
 echo "(Note: this will overwrite your existing installation.)"
-read -ren1
+echo "(Tip: to skip this warning entirely, use bored --skipconfirm.)"
+if [ -z "$1" ]
+then
+	read -ren1
+else
+	echo "-Z 3" 
+	if [ ! "$1" = "--skipconfirm" ]
+	then 
+		read -ren1
+	fi
+fi
 clear
-echo "Removing old files..."
-if [ -e ~/bin/bored ]; then rm -f ~/bin/bored; fi
+echo "[     ]"
+echo "Backing up the old version..."
+if [ -e ~/bin/bored ]; then rm -f ~/bin/bored.old && mv ~/bin/bored ~/bin/bored.old; fi
 if [ -e ~/bin/idealist.txt ]; then rm -f ~/bin/idealist.txt; fi
-if [ -d ~/.bored ]; then rm -rf ~/.bored; fi
+if [ -d ~/.bored ]; then rm -rf ~/.bored.old && mv -f ~/.bored ~/.bored.old; fi
 mkdir ~/.bored
+clear
+echo "[=    ]"
 echo "Making local bin folder..."
 pathfix="export PATH=$PATH:~/bin"
 grep -q -F '$pathfix' ~/.bashrc || echo '$pathfix' >> ~/.bashrc
 if ! [ -d ~/bin ]; then mkdir ~/bin; fi
+clear
+echo "[==   ]"
 echo "Copying idea list..."
 cp -f defaultlist.txt ~/.bored/defaultlist.txt
 cp -f defaultnoid.txt ~/.bored/defaultnoid.txt
+clear
+echo "[===  ]"
 echo "Building the utility..."
 while read -r line
 do
@@ -30,8 +47,11 @@ do
         echo "$line" >> ~/bin/bored
     fi
 done < "bored"
-echo "Fix permissions..."
+clear
+echo "[==== ]"
+echo "Fixing permissions..."
 chmod 755 ~/bin/bored
 clear
+echo "[=====]"
 echo "Done!"
 echo "Run boredbutton using the bored command."
