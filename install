@@ -11,7 +11,6 @@ if [ -z "$1" ]
 then
 	read -ren1
 else
-	echo "-Z 3" 
 	if [ ! "$1" = "--skipconfirm" ]
 	then 
 		read -ren1
