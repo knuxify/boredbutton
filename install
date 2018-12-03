@@ -41,7 +41,7 @@ then
 		echo "FAILED"
 		echo "No backup found!"
 	fi
-		
+fi		
 clear
 echo "[     ]"
 echo "Backing up the old version..."
