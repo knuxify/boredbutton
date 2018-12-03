@@ -4,26 +4,49 @@ echo "BoredInstaller"
 echo "---"
 echo "You are about to install boredbutton."
 echo "It will be saved to "~"/bin/."
-echo "Press any button to continue."
+echo "Press the R button to restore the previous version, and any other button to continue."
 echo "(Note: this will overwrite your existing installation.)"
 echo "(Tip: to skip this warning entirely, use bored --skipconfirm.)"
 if [ -z "$1" ]
 then
-	read -ren1
+	read -ren1 restore
 else
 	echo "-Z 3" 
 	if [ ! "$1" = "--skipconfirm" ]
 	then 
-		read -ren1
+		read -ren1 restore
 	fi
 fi
+if [ "$restore" = "r" ]
+then
+	clear
+	echo "[=   ]"
+	echo "Finding backup paths..."
+	if [ -d "~/.bored.old" ]
+	then
+		clear
+		echo "[==  ]"
+		echo "Restoring backup..."
+		mv -f ~/.bored.old ~/.bored
+		clear
+		echo "[=== ]"
+		echo "Restoring backup..."
+		mv -f ~/bin/bored.old ~/bin/bored
+		clear
+		echo "[====]"
+		echo "Done!"
+	else
+		clear
+		echo "[xxxx]"
+		echo "FAILED"
+		echo "No backup found!"
+	fi
+		
 clear
 echo "[     ]"
 echo "Backing up the old version..."
 if [ -e ~/bin/bored ]; then rm -f ~/bin/bored.old && mv ~/bin/bored ~/bin/bored.old; fi
 if [ -e ~/bin/idealist.txt ]; then rm -f ~/bin/idealist.txt; fi
-if [ -d ~/.bored ]; then rm -rf ~/.bored.old && mv -f ~/.bored ~/.bored.old; fi
-mkdir ~/.bored
 clear
 echo "[=    ]"
 echo "Making local bin folder..."
