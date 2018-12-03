@@ -12,6 +12,14 @@ randomid=$(awk -v min=1 -v max=$idcount 'BEGIN{srand(); print int(min+rand()*(ma
 boreddebug "random id: $randomid"
 # Get the entry.
 grep -A2 ID$randomid $list > ~/.bored/tmp
+if [ -z "$(cat ~/.bored/tmp)" ]
+then
+	echo "ID $randomid not found!"
+	echo "Have you been tampering with the idea list manually?"
+	echo "Read this for more information:"
+	echo "https://github.com/knuxfanwin8/boredbutton/wiki/Idea-lists"
+	exit
+fi
 source ~/.bored/tmp &> /dev/null
 boreddebug "$(cat ~/.bored/tmp)"
 # Output everything.
