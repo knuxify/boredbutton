@@ -10,7 +10,7 @@
 #############################
 # Github: https://github.com/knuxfanwin8/boredbutton
 # Current version:
-version="v1.0.2"
+version="v1.0.2.1"
 # Feel free to fork and modify the code, as long as you don't claim it as your own!
 ###############################
 # Have a good idea for an activity? Post it in an issue in the GitHub repo!
@@ -36,7 +36,15 @@ list=~/.bored/idealist.txt
 counterfile=~/.bored/count.txt
 
 # Fetch counter.
-counter="$(cat $counterfile)"
+function getcounter {
+	if [ -e ~/.bored/count.txt ]
+	then
+		echo "$(cat ~/.bored/count.txt)"
+	else
+		echo "0"
+	fi
+}
+counter="$(getcounter)"
 
 # Debugger
 source ./debugger.sh
