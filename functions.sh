@@ -69,8 +69,8 @@ function factnew {
     read -ren1
     let idcount++
     echo "ID$idcount" >> $list
-    echo "name='$newactname'" >> $list
-    echo "desc='$newactdesc'" >> $list
+    echo 'name="'"$newactname"'"' >> $list
+    echo 'desc="'"$newactdesc"'"' >> $list
     clear
     echo -e "${warn}### Create a new idea ###${white}"
     echo "Done! Your new idea has been added."
