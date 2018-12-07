@@ -30,6 +30,7 @@ if ! [ -d ~/bin ]; then mkdir ~/bin; fi
 clear
 echo "[==   ]"
 echo "Copying idea list..."
+if ! [ -d ~/.bored/ ]; then mkdir ~/.bored; fi
 cp -f defaultlist.txt ~/.bored/defaultlist.txt
 cp -f defaultnoid.txt ~/.bored/defaultnoid.txt
 clear
