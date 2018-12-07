@@ -76,6 +76,59 @@ function factnew {
     echo "Done! Your new idea has been added."
     exit
 }
-function fpack {
-	echo "Not done yet! Should be added in release v1.1."
+function fpackmake {
+	clear
+	echo -e "${warn}### Package idea lists ###${white}"
+	echo -e "Type in the directory in which the package should be placed."
+	echo "Note: this will overwrite any file with this name."
+	read -re packdir
+	packdir=${packdir/'~'/$HOME}
+	if [ -z $packdir ]; then
+		packdir=$PWD/package.bored
+	fi	
+	if [ -d $packdir ]; then
+		packdir=$packdir/package.bored
+	fi
+	clear
+	echo "Preparing..."
+	grep -v -x -f ~/.bored/defaultnoid.txt ~/.bored/idealist.txt | sed '/^ID/ d' > $packdir
+	boreddebug "$(cat $packdir)"
+	clear
+	echo "Done! Saved in $packdir."
+	exit
+}
+function fpackload {
+	clear
+	echo -e "${warn}### Load package ###${white}"
+	echo -e "Type in the package's location."
+	read -re packdir
+	if [ -z $packdir ]; then
+		packdir=$PWD/package.bored
+	fi	
+	if [ -d $packdir ]; then
+		packdir=$packdir/package.bored
+	fi
+	packdir=${packdir/'~'/$HOME}
+	# BEGIN
+		idcount=$(grep -c 'ID' $list)
+		boreddebug "$idcount" 
+		cp -f $packdir ~/.bored/packtmp &> /dev/null
+		while IFS= read -r line
+		do
+			boreddebug "Reading line $line..."
+			if [[ "$line" == "name="* ]] && ! grep -q "$line" ~/.bored/idealist.txt
+			then
+				boreddebug "--! Line contains name: $line"
+				let idcount++
+				boreddebug "ID count now: $idcount"
+				grep -A1 "$line" ~/.bored/packtmp > ~/.bored/packtmpf
+				sed "/$line/ { N; s/$line/ID$idcount\n&/ }" ~/.bored/packtmpf >> ~/.bored/idealist.txt
+			fi
+		done < "$HOME/.bored/packtmp"
+		boreddebug "$(cat ~/.bored/packtmp)"
+		rm -f ~/.bored/packtmp
+		rm -f ~/.bored/packtmpf
+	# END
+	echo "Done!"
+	exit
 }
