@@ -1,4 +1,4 @@
-# boredbutton v1.0.3
+# boredbutton v1.1
 ## The ultimate anti-boredom utility.
 ![boredbutton](https://awo.oooooooooooooo.ooo/i/zhxt.gif)
 ## Why would I need it?
@@ -17,5 +17,5 @@ You know when you get bored? This button keeps track of how much times you are b
 Pretty much the same but you download/clone the repo instead of getting the release.
 ## How to use
 Run ``bored`` in the terminal. It's that simple!
-To access options like the idea creator, counter options (delete, decrease, set) and (soon) package idea lists, run ``bored setup``. 
+To access options like the idea creator, counter options (delete, decrease, set) and package idea lists, run ``bored setup``. 
 
