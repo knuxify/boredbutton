@@ -16,6 +16,7 @@ else
 		read -ren1
 	fi
 fi
+dos2unix ./* &> /dev/null
 clear
 echo "[     ]"
 echo "Removing the old version..."
