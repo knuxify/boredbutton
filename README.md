@@ -8,9 +8,8 @@ You know when you get bored? This button keeps track of how much times you are b
 
 1. Grab the newest release from the [Releases page](https://github.com/knuxfanwin8/boredbutton/releases). 
 2. Unzip the release. 
-3. If you haven't set up a local bin folder, do it. (note: Ubuntu does this automatically, you just have to make the ~/bin folder yourself)
-4. Open a terminal session in the folder.
-5. Run ``./install``.
+3. Open a terminal session in the folder.
+4. Run ``./install``.
 
 ``BUILD IT YOURSELF``
 
