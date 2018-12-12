@@ -3,6 +3,10 @@ function aboutb {
     echo "Github: https://github.com/knuxfanwin8/boredbutton"
 }
 
+function fprintact {
+	cat ~/.bored/idealist.txt
+	exit
+}
 
 function fdel {
     clear
