@@ -3,20 +3,18 @@ function aboutb {
     echo "Github: https://github.com/knuxfanwin8/boredbutton"
 }
 
-<<<<<<< HEAD
 function fupdatertoggle {
 	if [ "$updatertoggle" = "1" ]; then echo "0" > ~/.bored/updater; else echo "1" > ~/.bored/updater; fi
 	clear
 	echo "Done!"
 	exit
 }
-=======
+
 function fprintact {
 	cat ~/.bored/idealist.txt
 	exit
 }
 
->>>>>>> 30c146aa6044f47bab82d69458b032655893f0d6
 function fdel {
     clear
     echo -e "${warn}### Delete counter data###${white}"
