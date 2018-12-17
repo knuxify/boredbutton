@@ -11,7 +11,7 @@
 # Github: https://github.com/knuxfanwin8/boredbutton
 # Current version:
 version="v1.2"
-versionnum="1"
+versionnum="001"
 # Feel free to fork and modify the code, as long as you don't claim it as your own!
 ###############################
 # Have a good idea for an activity? Post it in an issue in the GitHub repo!
@@ -47,12 +47,26 @@ function getcounter {
 }
 counter="$(getcounter)"
 
+# Fetch updater toggle.
+function gettoggle {
+	if [ -e ~/.bored/updater ]
+	then
+		echo "$(cat ~/.bored/updater)"
+	else
+		echo "1"
+	fi
+}
+updatertoggle="$(gettoggle)"
+
+
 # Debugger
 source ./debugger.sh
 
 # Updater
-source ./updater.sh
-
+if [ "$updatertoggle" = "1" ]
+then
+	source ./updater.sh
+fi
 # Checks
 source ./checks.sh
 
