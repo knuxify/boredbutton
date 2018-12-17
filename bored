@@ -19,11 +19,15 @@ versionnum="001"
 ###############################
 
 # Colors
+background='\033[1;40m'
 white='\033[1;37m'
 error='\033[0;31m'
 warn='\033[1;33m'
 menuname='\033[1;32m'
 randomcolor="\033[38;5;$(awk -v min=20 -v max=231 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')m"
+
+# Set background
+printf "$background$white"
 
 # Variables
 homedir=~/
@@ -87,6 +91,9 @@ source ./arguments.sh
 
 # Idea generator
 source ./gen.sh
+
+# Reset colors
+printf "\033[0m"
 
 boreddebug "Done in $SECONDS seconds."
 exit
