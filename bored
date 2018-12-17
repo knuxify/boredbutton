@@ -11,6 +11,7 @@
 # Github: https://github.com/knuxfanwin8/boredbutton
 # Current version:
 version="v1.2"
+versionnum="1"
 # Feel free to fork and modify the code, as long as you don't claim it as your own!
 ###############################
 # Have a good idea for an activity? Post it in an issue in the GitHub repo!
@@ -35,9 +36,6 @@ list=~/.bored/idealist.txt
 # Counter location
 counterfile=~/.bored/count.txt
 
-# Updater
-source ./updater.sh
-
 # Fetch counter.
 function getcounter {
 	if [ -e ~/.bored/count.txt ]
@@ -52,11 +50,17 @@ counter="$(getcounter)"
 # Debugger
 source ./debugger.sh
 
+# Updater
+source ./updater.sh
+
 # Checks
 source ./checks.sh
 
 # Functions
 source ./functions.sh
+
+# Idea manager
+source ./ideaman.sh
 
 # Setup utility
 function setup { 
