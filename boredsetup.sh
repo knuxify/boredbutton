@@ -14,7 +14,10 @@ do
 	echo -e "${menuname}Package idea list for distribution${white} - ${warn}packmake${white}"
 	echo -e "${menuname}Load an idea list${white} - ${warn}packload${white}"
     echo -e "\n${menuname}Note: ${white}To recreate idea data, run ${warn}bored${white}."
-    echo -e "\n${menuname}### Exit ###${white}\n"
+    echo -e "\n${menuname}### Updater ###${white}\n"
+	if [ "$updatertoggle" = "1" ]; then echo -e "${warn}Updater: ${menuname}ON${white}"; else echo -e "${warn}Updater: ${menuname}OFF${white}"; fi
+	echo -e "${menuname}Toggle updater on/off${white} - ${warn}updatertoggle${white}."
+	echo -e "\n${menuname}### Exit ###${white}\n"
 	echo -e "To exit, type anything else or just press Enter."
 	echo -e "\n${menuname}######################${white}"
 	read -re choice
