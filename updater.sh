@@ -1,6 +1,4 @@
 function boredupdater {
-	echo -e "${white}Checking for updates..."
-	updateraw=$(curl -s https://knuxfanwin8.github.io/softversions/index.html | grep "boredbutton")
 	boreddebug "..."
 	update=${updateraw:12:-4}
 	updatenum="${updateraw//boredbutton $update /}"
@@ -58,16 +56,6 @@ if ! hash curl 2>/dev/null; then
 	echo "To disable the updater use 'bored updatertoggle'."
 	noupdate=1
 else
-if ! hash wget 2>/dev/null
-then
-	echo -e "${warn}[NOTE]${white} wget is not installed! Internet connection check will be skipped."
-	echo "To disable the updater (including the connection check) use 'bored updatertoggle'."
-	noupdate=1
-else
-	boreddebug "fetch update"
-	wget -q --spider http://knuxfanwin8.github.io/softversions/index.html
-	if [ $? -eq 0 ] && [ "$noupdate" = "0" ]; then
-    	boredupdater
-	fi
-fi
+	echo -e "${white}Checking for updates..."
+	updateraw=$(curl -s https://knuxfanwin8.github.io/softversions/index.html | grep "boredbutton")
 fi
