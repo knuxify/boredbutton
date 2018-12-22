@@ -1,4 +1,4 @@
-# boredbutton v1.1
+# boredbutton v1.2
 ## The ultimate anti-boredom utility.
 ![boredbutton](https://awo.oooooooooooooo.ooo/i/zhxt.gif)
 ## Why would I need it?
