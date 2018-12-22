@@ -4,10 +4,8 @@ function aboutb {
 }
 
 function fupdatertoggle {
-	if [ "$updatertoggle" = "1" ]; then echo "0" > ~/.bored/updater; else echo "1" > ~/.bored/updater; fi
-	clear
-	echo "Done!"
-	exit
+	if [ "$updatertoggle" = "1" ]; then echo "0" > ~/.bored/updater && updatertoggle="0"; else echo "1" > ~/.bored/updater && updatertoggle="1"; fi
+	echo "Updater: "; if [ "$updatertoggle" = "1" ]; then echo "ON"; else echo "OFF"; fi
 }
 
 function fprintact {
@@ -16,21 +14,15 @@ function fprintact {
 }
 
 function fdel {
-    clear
-    echo -e "${warn}### Delete counter data###${white}"
     rm -rf $counterfile
     echo "0" > $counterfile
-    echo -e "Done!"
-    exit
+    echo -e "${warn}Counter cleared.${white}"
 }
 
 function fdecr {
-    clear
-    echo -e "${warn}### Decrease counter value ###${white}"
-    let ccount--
+    let counter--
     echo "$counter" > $counterfile
     echo -e "The current count is now ${warn}$counter${white}."
-    exit
 }
 
 function fset {
@@ -50,10 +42,8 @@ function fset {
     exit
 }
 function factdel {
-    clear
-    echo -e "${warn}### Delete the idea list ###${white}"
     rm -rf $list
-    echo -e "Done! Please restore the idea list by running ${warn}bored${white}."
+    echo -e "Idea list restored."
     exit
 }
 function factnew {

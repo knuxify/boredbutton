@@ -10,8 +10,8 @@
 #############################
 # Github: https://github.com/knuxfanwin8/boredbutton
 # Current version:
-version="v1.2.1"
-versionnum="002"
+version="v1.2.2"
+versionnum="003"
 # Feel free to fork and modify the code, as long as you don't claim it as your own!
 ###############################
 # Have a good idea for an activity? Post it in an issue in the GitHub repo!
@@ -78,7 +78,7 @@ source ./ideaman.sh
 # Setup utility
 function setup { 
 	noupdate=1
-    source ./boredsetup.sh
+    source ./setupmenu.sh
 
 }
 
