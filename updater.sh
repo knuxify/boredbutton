@@ -29,7 +29,7 @@ function boredupdater {
 						clear
 						echo "[==  ]"
 						echo "Downloading new version..."
-						git clone --branch $version https://github.com/knuxfanwin8/boredbutton ~/.bored/update &>/dev/null
+						git clone --branch $update https://github.com/knuxfanwin8/boredbutton ~/.bored/update &>/dev/null
 						clear
 						echo "[=== ]"
 						echo "Installing new version..."
