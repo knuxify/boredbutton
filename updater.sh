@@ -58,4 +58,5 @@ if ! hash curl 2>/dev/null; then
 else
 	echo -e "${white}Checking for updates..."
 	updateraw=$(curl -s https://knuxfanwin8.github.io/softversions/index.html | grep "boredbutton")
+	boredupdater
 fi
