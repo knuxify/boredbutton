@@ -2,14 +2,13 @@ function boredupdater {
 	boreddebug "..."
 	update=${updateraw:12:-4}
 	updatenum="${updateraw//boredbutton $update /}"
-	echo "fetched update version $update ($updatenum)"
 	if [ -z "$updateraw" ]
 	then
 		boreddebug "No internet! Skipping update."
 	else
 		if [ "$version" = "$update" ]
 		then
-			echo "No updates available."
+			echo -e "\rNo updates available."
 		else
 			if [ "$versionnum" -lt "$updatenum" ]
 			then
@@ -22,30 +21,29 @@ function boredupdater {
 					if [ "$option" = "y" ] || [ "$option" = "Y" ]
 					then
 						clear
-						echo "[=   ]"
+						echo -e "${white}[=   ]"
 						echo "Preparing..."
 						rm -rf ~/.bored/update
 						mkdir ~/.bored/update
 						clear
-						echo "[==  ]"
+						echo -e "${white}[==  ]"
 						echo "Downloading new version..."
 						git clone --branch $update https://github.com/knuxfanwin8/boredbutton ~/.bored/update &>/dev/null
 						clear
-						echo "[=== ]"
+						echo -e "${white}[=== ]"
 						echo "Installing new version..."
 						~/.bored/update/install --skipconfirm &>/dev/null
 						clear
-						echo "[====]"
+						echo -e "${white}[====]"
 						echo "Done!"
-						echo "Please run bored again"
+						echo "Please run bored again. "
 						exit
 					fi
 				else
 					echo "You can download it from the github repository."
 				fi		
 			else
-				echo "Something went wrong!"
-				echo "Are you a time traveler, or just screwing with the files?"	
+				echo "An error has occured! This is most likely an issue with the software version repository."	
 			fi
 		fi
 	fi
