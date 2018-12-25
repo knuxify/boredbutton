@@ -16,6 +16,7 @@ function fprintact {
 function fdel {
     rm -rf $counterfile
     echo "0" > $counterfile
+	counter=0
     echo -e "${warn}Counter cleared.${white}"
 }
 
@@ -38,13 +39,14 @@ function fset {
         exit
     fi
     echo "$newval" > $counterfile
+	counter=$newval
     echo -e "Changed the count to ${warn}$newval${white}!"
-    exit
 }
 function factdel {
     rm -rf $list
+	touch $list
     echo -e "Idea list restored."
-    exit
+	if [ $setup = "0" ]; then exit; fi
 }
 function factnew {
     clear
