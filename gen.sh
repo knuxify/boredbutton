@@ -4,9 +4,6 @@ echo "$counter" > $counterfile
 boreddebug "$counter saved to $counterfile"
 # Display some info
 echo -e "${white}boredbutton ${warn}$version${white} | do ${menuname}'bored setup'${white} for utilities | you used the button ${warn}$counter${white} times"
-# Generate id count.
-idcount=$(grep -c 'ID' $list)
-boreddebug "idcount: $idcount"
 # Pick a random ID.
 randomid=$(awk -v min=1 -v max=$idcount 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
 boreddebug "random id: $randomid"

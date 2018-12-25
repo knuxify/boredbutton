@@ -10,8 +10,8 @@
 #############################
 # Github: https://github.com/knuxfanwin8/boredbutton
 # Current version:
-version="v1.2.3.2"
-versionnum="004"
+version="v1.2.4"
+versionnum="005"
 # Feel free to fork and modify the code, as long as you don't claim it as your own!
 ###############################
 # Have a good idea for an activity? Post it in an issue in the GitHub repo!
@@ -68,6 +68,10 @@ source ./debugger.sh
 
 # Checks
 source ./checks.sh
+
+# Generate id count.
+idcount=$(grep -c 'ID' $list)
+boreddebug "idcount: $idcount"
 
 # Functions
 source ./functions.sh

@@ -9,6 +9,7 @@ do
 	echo -e "${menuname}Decrease counter by 1${white} - ${warn}decr${white}."
 	echo -e "${menuname}Set counter value${white} - ${warn}set${white}."
 	echo -e "\n${menuname}### Idea options ###${white}\n"
+	echo -e "${warn}Ideas: ${menuname}${idcount}${white}"
 	echo -e "${menuname}Idea manager (view ideas, edit, delete, create)${white} - ${warn}ideaman${white}."
 	echo -e "${menuname}Remove all ideas${white} - ${warn}actdel${white}."
 	echo -e "${menuname}Package idea list for distribution${white} - ${warn}packmake${white}"
