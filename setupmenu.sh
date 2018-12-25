@@ -11,7 +11,7 @@ do
 	echo -e "\n${menuname}### Idea options ###${white}\n"
 	echo -e "${warn}Ideas: ${menuname}${idcount}${white}"
 	echo -e "${menuname}Idea manager (view ideas, edit, delete, create)${white} - ${warn}ideaman${white}."
-	echo -e "${menuname}Remove all ideas${white} - ${warn}actdel${white}."
+	echo -e "${menuname}Remove all ideas (will be restored to default after restart if none are created)${white} - ${warn}actdel${white}."
 	echo -e "${menuname}Package idea list for distribution${white} - ${warn}packmake${white}"
 	echo -e "${menuname}Load an idea list${white} - ${warn}packload${white}"
     echo -e "\n${menuname}Note: ${white}To recreate idea data, run ${warn}bored${white}."

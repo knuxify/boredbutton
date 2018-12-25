@@ -45,6 +45,7 @@ function fset {
 function factdel {
     rm -rf $list
 	touch $list
+	idcount=0
     echo -e "Idea list restored."
 	if [ $setup = "0" ]; then exit; fi
 }
