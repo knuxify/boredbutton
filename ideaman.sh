@@ -66,7 +66,8 @@ function ideaman {
 		if echo "$line" | grep -q "name"; then echo -e "$warn- Name: $white${line:5}"; fi
 		if echo "$line" | grep -q "desc"; then echo -e "$warn- Description: $white${line:5}"; fi
 	done <~/.bored/idealist.txt
-	echo "Type in the ID of the idea you want to edit. Type in anything else to create a new idea."
+	echo "==="
+	echo -e "${menuname}Type in the ID of the idea you want to edit. Type in anything else to create a new idea."
 while [ "$menuloop" = "0" ]; do
 	read -re idpick
 	idpick=${idpick//ID/}
