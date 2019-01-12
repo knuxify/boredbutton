@@ -28,7 +28,7 @@ function boredupdater {
 						clear
 						echo -e "${white}[==  ]"
 						echo "Downloading new version..."
-						git clone --branch $update https://github.com/knuxfanwin8/boredbutton ~/.bored/update &>/dev/null
+						git clone --branch stable-compiled https://github.com/knuxfanwin8/boredbutton ~/.bored/update &>/dev/null
 						clear
 						echo -e "${white}[=== ]"
 						echo "Installing new version..."
