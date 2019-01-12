@@ -1,57 +1,16 @@
 #!/bin/bash
-clear
-echo "BoredInstaller"
-echo "---"
-echo "You are about to install boredbutton."
-echo "It will be saved to "~"/bin/."
-echo "Press any button to continue."
-echo "(Note: this will overwrite your existing installation.)"
-echo "(Tip: to skip this warning entirely, use bored --skipconfirm.)"
-if [ -z "$1" ]
-then
-	read -ren1
-else
-	if [ ! "$1" = "--skipconfirm" ]
-	then 
-		read -ren1
-	fi
-fi
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-dos2unix $DIR/* &> /dev/null
-clear
-echo "[     ]"
-echo "Removing the old version..."
-if [ -e ~/bin/bored ]; then rm -f ~/bin/bored.old && mv ~/bin/bored ~/bin/bored.old; fi
-if [ -e ~/bin/idealist.txt ]; then rm -f ~/bin/idealist.txt; fi
-clear
-echo "[=    ]"
-echo "Making local bin folder..."
-pathfix="export PATH=$PATH:~/bin"
-grep -q -F '$pathfix' ~/.bashrc || echo '$pathfix' >> ~/.bashrc
-if ! [ -d ~/bin ]; then mkdir ~/bin; fi
-clear
-echo "[==   ]"
-echo "Copying idea list..."
-if ! [ -d ~/.bored/ ]; then mkdir ~/.bored; fi
-cp -f $DIR/defaultlist.txt ~/.bored/defaultlist.txt
-cp -f $DIR/defaultnoid.txt ~/.bored/defaultnoid.txt
-clear
-echo "[===  ]"
-echo "Building the utility..."
-while read -r line
-do
-    if [[ $line == source* ]]
-    then
-        cat ${line:7} >> ~/bin/bored
-    else
-        echo "$line" >> ~/bin/bored
-    fi
-done < "$DIR/bored"
-clear
-echo "[==== ]"
-echo "Fixing permissions..."
-chmod 755 ~/bin/bored
-clear
-echo "[=====]"
-echo "Done!"
-echo "Run boredbutton using the bored command."
+
+# Fast boredbutton installer
+# Use for updater only, unless system does not support building
+# Does not set up PATH.
+
+rm ~/bin/bored
+cp bored ~/bin/
+chmod ~/bin/bored 777
+
+rm ~/.bored/defaultlist.txt
+cp defaultlist.txt ~/.bored/
+rm ~/.bored/defaultnoid.txt
+cp defaultnoid.txt ~/.bored/
+
+
