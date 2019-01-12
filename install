@@ -27,7 +27,7 @@ clear
 echo "[=    ]"
 echo "Making local bin folder..."
 pathfix="export PATH=$PATH:~/bin"
-grep -q -F '$pathfix' ~/.bashrc || echo '$pathfix' >> ~/.bashrc
+grep -q -F "$pathfix" ~/.bashrc || echo "$pathfix" >> ~/.bashrc
 if ! [ -d ~/bin ]; then mkdir ~/bin; fi
 clear
 echo "[==   ]"
