@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# bored configuration utility
+version="2"
+# branch: v2 (rewrite 2)
+# https://github.com/knuxfanwin8/boredbutton
+# deprecates bored setup
+
+highlight="\e[1;33m"
+error="\e[1;31m"
+bold="\e[1m"
+reset="\e[0m"
+
+# List and counter locations
+listfile=~/.config/bored/ideas
+configfile=~/.config/bored/config
+
+# Load configuration
+while IFS="" read -r config || [ -n "$config" ]
+do
+	case $config in
+		counter*) counter=$(echo "$config" | cut -c 9-);;
+	esac
+done < $configfile
+
+# Main menu
+echo -e "boredbutton config | current counter value: ${highlight}${counter}${reset}"
+echo -e "$highlight###$reset"
+echo -e "${highlight}c${reset} - change counter value"
+echo -e "${highlight}q${reset} - quit"
+echo -e "${highlight}Note:${reset} These are case sensitive."
+until [ "$choice" = "c" ] || [ "$choice" = "q" ]; do
+	read -ren1 choice
+done
+case $choice in
+	q) exit 0;;
+	c) re='^[0-9]+$'
+	   echo -e "${highlight}Enter new counter number:"
+	   while ! [[ "$number" =~ $re ]]; do 
+	   read -re number; done; counter=$number
+	   sed -i '/counter\=/d' $configfile
+	   echo "counter=$counter" >> $configfile
+	   echo "The counter is now $counter."
+	   exit 0;;
+esac

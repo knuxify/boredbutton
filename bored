@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# bored - small utility that gives you ideas for what to do
+version="2.0"
+# branch: v2 (rewrite 2)
+# https://github.com/knuxfanwin8/boredbutton
+
+# v1 used a forced black bg and white text. This didn't look good on non black-and-white terminals. 
+# Now, we adapt to the terminal's color scheme.
+highlight="\e[1;33m"
+error="\e[1;31m"
+bold="\e[1m"
+reset="\e[0m"
+
+# List and counter locations
+listfile=~/.config/bored/ideas
+configfile=~/.config/bored/config
+
+
+# Set counter
+if [ -e $configfile ]; then counter="$(grep 'counter=' $configfile | grep -o '[0-9]\+' )"; else counter=0; fi
+
+# Load arguments
+# We use a bashism method here. Ideally, there should be a POSIX-compatible solution (see issue #12)
+if [[ "$*" = *"-a"* ]] || [[ "$*" = *"-a"* ]]; then echo -e "bored $version branch $branch\nsmall utility that gives you ideas for what to do"; fi
+
+# Move the counter up
+let counter++
+if [ -e $configfile ]; then
+	sed -i '/counter\=/d' $configfile
+	echo "counter=$counter" >> $configfile
+else
+	echo "counter=$counter" >> $configfile
+fi
+# Pick random ID
+randomid="$(( ( RANDOM % $(grep -c 'ID' $listfile) )  + 1 ))"
+
+# v1 loaded the activity file and sourced the lines after the ID, allowing for arbitrary code execution.
+# v2 only gets the lines after the ID
+name="$(grep -A2 ID$randomid $listfile | grep 'name=' | cut -c 6-)"
+desc="$(grep -A2 ID$randomid $listfile | grep 'desc=' | cut -c 6-)"
+
+# Print out results
+echo -e "${reset}boredbutton ${highlight}$version${reset} | you used the program ${highlight}$counter${reset} times\n${highlight}###${reset}"
+echo -e "So you're bored, right? How about you:"
+echo -e "${highlight}${name//\"/}${reset}"
+echo "${desc//\"/}"
+# The bashisms here are temporary. 
