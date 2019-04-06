@@ -16,6 +16,17 @@ reset="\e[0m"
 listfile=~/.config/bored/ideas
 configfile=~/.config/bored/config
 
+# Check if the list file exists
+if ! [ -e ~/.config/bored ]; then mkdir -p ~/.config/bored; fi
+if ! [ -e $listfile ]; then
+	echo "Downloading default list file..."
+	cd ~/.config/bored
+	wget https://raw.githubusercontent.com/knuxfanwin8/boredbutton/v2/ideas
+	if ! [ -e ~/.config/bored ]; then
+		echo "Could not download idea file."
+	fi
+fi	
+
 # Set counter
 if [ -e $configfile ]; then counter="$(grep 'counter=' $configfile | grep -o '[0-9]\+' )"; else counter=0; fi
 
@@ -35,6 +46,7 @@ OTHER:\n\
 	--version - Print version and exit"
 	exit 0
 fi
+
 # Move the counter up
 let counter++
 if [ -e $configfile ]; then

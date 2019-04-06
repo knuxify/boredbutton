@@ -1,0 +1,36 @@
+ID1
+name=Write a Bash script!
+desc=How about a fix to that one problem you keep getting and fixing with one command?
+ID2
+name=Try building your favorite programs yourself!
+desc=Maybe you can find the source of your favorite program and try to compile it. Freshest code and fixes guaranteed.
+ID3
+name=Try making a funny website!
+desc=Or a serious website. Either way, try your hand at web design.
+ID4
+name=Try flashing a ROM on your old phone!
+desc=Remember that old phone that has been sitting in your drawer for a few years? Give it a new life with a custom ROM. If you cannot find one, make it yourself!
+ID5
+name=Try to make some friends!
+desc=Find some people you could talk to, or communities for people with simmilar interests.
+ID6
+name=Read the news!
+desc=You could read stuff about your favorite topics. It can be great fun and helps you stay up-to-date.
+ID7
+name=Make your own boredbutton entries!
+desc=You can submit your own boredbutton entries by creating an issue in the github repo (you can find the link by using b --about or opening the file).
+ID8
+name=Finish your old projects!
+desc=You might have some ideas you never brought to life. It is time to fulfill your dreams!
+ID9
+name=Learn a new progamming language!
+desc=C, Java, Python - whatever you want.
+ID10
+name=Make a 'time machine'!
+desc=Get a box, a pendrive, some things you like and make a box that you can open in the next few years.
+ID11
+name=Clean up!
+desc=It doesn't matter if you're cleaning up your workbench or your drive - it can be a lot of fun to clean the space around you, and the results are really satisfying.
+ID12
+name=Try a DIY project!
+desc=A small pen holder or a box for screws - there are many cool ideas for simple things like those online.
