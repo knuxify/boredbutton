@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   test:
     docker:
@@ -11,3 +11,8 @@ jobs:
       - run:
           name: Test bored config
           command: echo -e "c\n1" | boredconf; echo -e "n\nTest boredbutton?\nIt is great fun." | boredconf
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
