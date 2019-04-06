@@ -16,7 +16,6 @@ reset="\e[0m"
 listfile=~/.config/bored/ideas
 configfile=~/.config/bored/config
 
-
 # Set counter
 if [ -e $configfile ]; then counter="$(grep 'counter=' $configfile | grep -o '[0-9]\+' )"; else counter=0; fi
 
@@ -37,8 +36,9 @@ randomid="$(( ( RANDOM % $(grep -c 'ID' $listfile) )  + 1 ))"
 
 # v1 loaded the activity file and sourced the lines after the ID, allowing for arbitrary code execution.
 # v2 only gets the lines after the ID
-name="$(grep -A2 ID$randomid $listfile | grep 'name=' | cut -c 6-)"
-desc="$(grep -A2 ID$randomid $listfile | grep 'desc=' | cut -c 6-)"
+
+name="$(grep -A2 "ID$randomid" $listfile | grep 'name=' | head -n1 | cut -c 6-)"
+desc="$(grep -A2 "ID$randomid" $listfile | grep 'desc=' | head -n1 | cut -c 6-)"
 
 # Print out results
 echo -e "${reset}boredbutton ${highlight}$version${reset} | you used the program ${highlight}$counter${reset} times\n${highlight}###${reset}"
