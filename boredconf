@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # bored configuration utility
-version="2"
+version="2.0"
 # branch: v2 (rewrite 2)
 # https://github.com/knuxfanwin8/boredbutton
 # deprecates bored setup
@@ -16,16 +16,20 @@ listfile=~/.config/bored/ideas
 configfile=~/.config/bored/config
 
 # Load arguments
-if [[ "$*" = *"-v"* ]] || [[ "$*" = *"--version"* ]]; then echo -e "boredconf from boredbutton $version"; exit 0; fi
-if [[ "$*" = *"-h"* ]] || [[ "$*" = *"--help"* ]]; then echo -e "Usage: bored --option\n\
+if [[ "$*" = *"-v"* ]] || [[ "$*" = *"--version"* ]]; then echo -e "boredconf (boredbutton $version)"; exit 0; fi
+if [[ "$*" = *"-h"* ]] || [[ "$*" = *"--help"* ]]; then echo -e "Usage: boredconf [menuoption] --option\n\
 
-boredconf is a complimentary utility for \'bored\'. \n\
-It allows the user to change multiple options..\n\
+boredconf is a complimentary utility for 'bored'. \n\
+\n\
+It allows the user to change multiple options related to boredbutton, such as the current counter number.\n\
 \n\
 Using the interface:\n\
 \n\
 When you run the program, it asks you to input a letter. Available options with descriptions are printed on startup.\n\
-Once you pick an option, you
+\n\
+You can also skip the interface entirely by simply typing in the letter coresponding to the option you want to change after the boredconf command:
+\n\
+boredconf c # jumps to counter change
 \n\
 Options:\n\
 OTHER:\n\
@@ -44,15 +48,19 @@ do
 done < $configfile
 
 # Main menu
-echo -e "boredbutton config | current counter value: ${highlight}${counter}${reset}"
-echo -e "$highlight###$reset"
-echo -e "${highlight}c${reset} - change counter value"
-echo -e "${highlight}n${reset} - create a new activity"
-echo -e "${highlight}q${reset} - quit"
-echo -e "${highlight}Note:${reset} These are case sensitive."
-until [ "$choice" = "c" ] || [ "$choice" = "q" ] || [ "$choice" = "n" ]; do
-	read -ren1 choice
-done
+if ! [[ "$*" = *"c"* ]] && ! [[ "$*" = *"n"* ]]; then
+	echo -e "boredbutton config | current counter value: ${highlight}${counter}${reset}"
+	echo -e "$highlight###$reset"
+	echo -e "${highlight}c${reset} - change counter value"
+	echo -e "${highlight}n${reset} - create a new activity"
+	echo -e "${highlight}q${reset} - quit"
+	echo -e "${highlight}Note:${reset} These are case sensitive."
+	until [ "$choice" = "c" ] || [ "$choice" = "q" ] || [ "$choice" = "n" ]; do
+		read -ren1 choice
+	done
+else
+	if [[ "$*" = *"c"* ]]; then choice=c; elif [[ "$*" = *"n"* ]]; then choice=n; fi
+fi
 case $choice in
 	q) exit 0;;
 	c) re='^[0-9]+$'
