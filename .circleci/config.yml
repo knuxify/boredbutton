@@ -1,0 +1,20 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: debian:stretch
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install
+          command: sudo make install
+
+      - run:
+          name: Test bored
+          command: bored
+	
+	  - run:
+		  name: Test bored config
+		  command: echo -e "c\n1" | boredconf; echo -e "n\nTest boredbutton?\nIt is great fun." | boredconf
