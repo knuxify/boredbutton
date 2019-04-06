@@ -20,7 +20,6 @@ configfile=~/.config/bored/config
 if [ -e $configfile ]; then counter="$(grep 'counter=' $configfile | grep -o '[0-9]\+' )"; else counter=0; fi
 
 # Load arguments
-# We use a bashism method here. Ideally, there should be a POSIX-compatible solution (see issue #12)
 if [[ "$*" = *"-a"* ]] || [[ "$*" = *"-a"* ]]; then echo -e "bored $version branch $branch\nsmall utility that gives you ideas for what to do"; fi
 
 # Move the counter up
