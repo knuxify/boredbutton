@@ -20,8 +20,21 @@ configfile=~/.config/bored/config
 if [ -e $configfile ]; then counter="$(grep 'counter=' $configfile | grep -o '[0-9]\+' )"; else counter=0; fi
 
 # Load arguments
-if [[ "$*" = *"-a"* ]] || [[ "$*" = *"-a"* ]]; then echo -e "bored $version branch $branch\nsmall utility that gives you ideas for what to do"; fi
+if [[ "$*" = *"-v"* ]] || [[ "$*" = *"--version"* ]]; then echo -e "boredbutton $version"; exit 0; fi
+if [[ "$*" = *"-h"* ]] || [[ "$*" = *"--help"* ]]; then echo -e "Usage: bored --option\n\
 
+bored is a small utility that gives you random ideas for things to do. \n\
+It picks a random idea from a file (stored in \~\/.config/bored/ideas).\n\
+It also counts how much times you used it.\n\
+\n\
+To change the value of the counter or reset it, or to add a new idea, you can use the \'boredconf\' utility.\n\
+\n\
+Options:\n\
+OTHER:\n\
+	--help - Print this and exit\n\
+	--version - Print version and exit"
+	exit 0
+fi
 # Move the counter up
 let counter++
 if [ -e $configfile ]; then

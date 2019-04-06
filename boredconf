@@ -15,6 +15,26 @@ reset="\e[0m"
 listfile=~/.config/bored/ideas
 configfile=~/.config/bored/config
 
+# Load arguments
+if [[ "$*" = *"-v"* ]] || [[ "$*" = *"--version"* ]]; then echo -e "boredconf from boredbutton $version"; exit 0; fi
+if [[ "$*" = *"-h"* ]] || [[ "$*" = *"--help"* ]]; then echo -e "Usage: bored --option\n\
+
+boredconf is a complimentary utility for \'bored\'. \n\
+It allows the user to change multiple options..\n\
+\n\
+Using the interface:\n\
+\n\
+When you run the program, it asks you to input a letter. Available options with descriptions are printed on startup.\n\
+Once you pick an option, you
+\n\
+Options:\n\
+OTHER:\n\
+    --help - Print this and exit\n\
+    --version - Print version and exit"
+    exit 0
+fi
+
+
 # Load configuration
 while IFS="" read -r config || [ -n "$config" ]
 do
@@ -27,9 +47,10 @@ done < $configfile
 echo -e "boredbutton config | current counter value: ${highlight}${counter}${reset}"
 echo -e "$highlight###$reset"
 echo -e "${highlight}c${reset} - change counter value"
+echo -e "${highlight}n${reset} - create a new activity"
 echo -e "${highlight}q${reset} - quit"
 echo -e "${highlight}Note:${reset} These are case sensitive."
-until [ "$choice" = "c" ] || [ "$choice" = "q" ]; do
+until [ "$choice" = "c" ] || [ "$choice" = "q" ] || [ "$choice" = "n" ]; do
 	read -ren1 choice
 done
 case $choice in
@@ -37,9 +58,19 @@ case $choice in
 	c) re='^[0-9]+$'
 	   echo -e "${highlight}Enter new counter number:"
 	   while ! [[ "$number" =~ $re ]]; do 
-	   read -re number; done; counter=$number
+	   read -re number; done; counter=$number                                                                     
 	   sed -i '/counter\=/d' $configfile
 	   echo "counter=$counter" >> $configfile
 	   echo "The counter is now $counter."
 	   exit 0;;
+	n) echo "Enter idea name, ending on '?'"
+	   until ! [ -z "$name" ]; do read -re name; done
+	   echo "Enter idea description."
+	   until ! [ -z "$desc" ]; do read -re desc; done
+	   idcount="$(grep -o 'ID' $listfile | wc -l)"
+	   let idcount++
+	   echo "ID$idcount" >> $listfile
+	   echo "name=$name" >> $listfile
+	   echo "desc=$desc" >> $listfile
+	   echo "Done."; exit 0;;
 esac
