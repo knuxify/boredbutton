@@ -11,10 +11,10 @@ jobs:
           name: Install
           command: sudo make install
 
-   test:
-     docker:
-         - image: debian:stretch
-     steps:
+  test:
+    docker:
+      - image: debian:stretch
+    steps:
       - run:
           name: Test bored
           command: bored
