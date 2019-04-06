@@ -5,6 +5,9 @@ jobs:
       - image: debian:stretch
     steps:
       - run:
+          name: Get source
+          command: git clone https://github.com/knuxfanwin8/boredbutton -b v2; cd boredbutton
+      - run:
           name: Test bored
           command: ./bored
 
