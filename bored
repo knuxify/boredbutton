@@ -67,6 +67,5 @@ desc="$(grep -A2 "ID$randomid" $listfile | grep 'desc=' | head -n1 | cut -c 6-)"
 # Print out results
 echo -e "${reset}boredbutton ${highlight}$version${reset} | you used the program ${highlight}$counter${reset} times\n${highlight}###${reset}"
 echo -e "So you're bored, right? How about you:"
-echo -e "${highlight}${name//\"/}${reset}"
-echo "${desc//\"/}"
-# The bashisms here are temporary. 
+echo -e "${highlight}$name${reset}"
+echo "$desc"
