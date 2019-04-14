@@ -2,6 +2,7 @@
 
 # bored configuration utility
 version="2.0"
+numeric="007"
 # branch: v2 (rewrite 2)
 # https://github.com/knuxfanwin8/boredbutton
 # deprecates bored setup
@@ -37,7 +38,7 @@ OTHER:\n\
     --version - Print version and exit"
     exit 0
 fi
-
+# Updater
 
 # Load configuration
 while IFS="" read -r config || [ -n "$config" ]
@@ -53,13 +54,14 @@ if ! [[ "$*" = *"c"* ]] && ! [[ "$*" = *"n"* ]]; then
 	echo -e "$highlight###$reset"
 	echo -e "${highlight}c${reset} - change counter value"
 	echo -e "${highlight}n${reset} - create a new activity"
+	echo -e "${highlight}u${reset} - check for updates"
 	echo -e "${highlight}q${reset} - quit"
 	echo -e "${highlight}Note:${reset} These are case sensitive."
-	until [ "$choice" = "c" ] || [ "$choice" = "q" ] || [ "$choice" = "n" ]; do
+	until [ "$choice" = "c" ] || [ "$choice" = "q" ] || [ "$choice" = "n" ] || [ "$choice" = "u" ]; do
 		read -ren1 choice
 	done
 else
-	if [[ "$*" = *"c"* ]]; then choice=c; elif [[ "$*" = *"n"* ]]; then choice=n; fi
+	if [[ "$*" = *"c"* ]]; then choice=c; elif [[ "$*" = *"n"* ]]; then choice=n; elif [[ "$*" = *"u"* ]]; then choice=u; fi
 fi
 case $choice in
 	q) exit 0;;
@@ -81,4 +83,18 @@ case $choice in
 	   echo "name=$name" >> $listfile
 	   echo "desc=$desc" >> $listfile
 	   echo "Done."; exit 0;;
+	u) if command -v curl &>/dev/null; then 
+	       numericnew="$(curl -s https://raw.githubusercontent.com/knuxfanwin8/softversions/master/boredbutton)"
+	       if [ "$numeric" -lt "$numericnew" ]; then 
+	           echo "Update available! Press any button to install."
+	           read -ren1
+	           git clone https://github.com/knuxfanwin8/boredbutton
+	           cd boredbutton
+	           sudo make install
+	           cd ..
+	           rm -rf boredbutton
+	           echo "Update finished!"
+	           else echo "No updates available."
+	       fi
+	   fi
 esac
