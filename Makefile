@@ -13,7 +13,8 @@ install:
 	@cp -p boredconf.1 $(DESTDIR)$(MANDIR)/man1
 	@chmod 755 $(DESTDIR)$(PREFIX)/bin/bored
 	@chmod 755 $(DESTDIR)$(PREFIX)/bin/boredconf
-	@cp -fp ideas $(DESTDIR)/etc/config/bored/ideas
+	@mkdir -p $(DESTDIR)/etc/bored
+	@cp -fp ideas $(DESTDIR)/etc/bored/ideas
 
 uninstall:
 	@rm -rf $(DESTDIR)$(PREFIX)/bin/bored
