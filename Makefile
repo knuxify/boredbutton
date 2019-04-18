@@ -21,5 +21,5 @@ uninstall:
 	@rm -rf $(DESTDIR)$(PREFIX)/bin/boredconf
 	@rm -rf $(DESTDIR)$(MANDIR)/man1/bored.1*
 	@rm -rf $(DESTDIR)$(MANDIR)/man1/boredconf.1*
-	@rm -rf $(DESTDIR)/etc/config/bored
+	@rm -rf $(DESTDIR)/etc/bored
 	@echo To remove configs, remove the \~/config/bored directory.
