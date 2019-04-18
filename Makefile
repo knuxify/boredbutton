@@ -13,14 +13,12 @@ install:
 	@cp -p boredconf.1 $(DESTDIR)$(MANDIR)/man1
 	@chmod 755 $(DESTDIR)$(PREFIX)/bin/bored
 	@chmod 755 $(DESTDIR)$(PREFIX)/bin/boredconf
-
-ideainstall:
-	@mkdir -p $(HOME)/.config/bored
-	@cp -fp ideas $(HOME)/.config/bored/
+	@cp -fp ideas $(DESTDIR)/etc/config/bored/ideas
 
 uninstall:
 	@rm -rf $(DESTDIR)$(PREFIX)/bin/bored
 	@rm -rf $(DESTDIR)$(PREFIX)/bin/boredconf
 	@rm -rf $(DESTDIR)$(MANDIR)/man1/bored.1*
 	@rm -rf $(DESTDIR)$(MANDIR)/man1/boredconf.1*
+	@rm -rf $(DESTDIR)/etc/config/bored
 	@echo To remove configs, remove the \~/config/bored directory.
