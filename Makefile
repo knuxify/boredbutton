@@ -13,13 +13,10 @@ install:
 	@cp -p boredconf.1 $(DESTDIR)$(MANDIR)/man1
 	@chmod 755 $(DESTDIR)$(PREFIX)/bin/bored
 	@chmod 755 $(DESTDIR)$(PREFIX)/bin/boredconf
-	@echo Done!
-	@echo To install the idea file, run 'make ideainstall' (not as sudo).
 
 ideainstall:
 	@mkdir -p $(HOME)/.config/bored
 	@cp -fp ideas $(HOME)/.config/bored/
-	@echo "Done!"
 
 uninstall:
 	@rm -rf $(DESTDIR)$(PREFIX)/bin/bored
