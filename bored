@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 # bored - small utility that gives you ideas for what to do
 version="2.0"
@@ -6,7 +6,7 @@ numeric="007"
 # branch: v2 (rewrite 2)
 # https://github.com/knuxfanwin8/boredbutton
 
-# v1 used a forced black bg and white text. This didn't look good on non black-and-white terminals. 
+# v1 used a forced black bg and white text. This didn't look good on non black-and-white terminals.
 # Now, we adapt to the terminal's color scheme.
 highlight="\e[1;3$(( ( RANDOM % 6 ) + 1 ))m"
 error="\e[1;31m"
@@ -18,15 +18,18 @@ listfile=~/.config/bored/ideas
 configfile=~/.config/bored/config
 
 # Check if the list file exists
-if ! [ -e ~/.config/bored ]; then mkdir -p ~/.config/bored; fi
-if ! [ -e $listfile ]; then cp /etc/bored/ideas $listfile; fi
+[ -e ~/.config/bored ] || mkdir -p ~/.config/bored
+[ -e /etc/bored/ideas ] || { echo -e "${error}Idea list not found.${reset} Please run ${bold}sudo make install${reset} or ${bold}sudo make install-ideas${reset}."; exit 1; }
+[ -e $listfile ] || cp /etc/bored/ideas $listfile
 
 # Set counter
 if [ -e $configfile ]; then counter="$(grep 'counter=' $configfile | grep -o '[0-9]\+' )"; else counter=0; fi
 
 # Load arguments
-if [[ "$*" = *"-v"* ]] || [[ "$*" = *"--version"* ]]; then echo -e "boredbutton $version"; exit 0; fi
-if [[ "$*" = *"-h"* ]] || [[ "$*" = *"--help"* ]]; then echo -e "Usage: bored --option\n\
+for a in $*; do
+	case $a in
+		-v|--version) echo "boredbutton $version"; exit;;
+		-h|--help) echo -e "Usage: bored --option\n\
 
 bored is a small utility that gives you random ideas for things to do. \n\
 It picks a random idea from a file (stored in \~\/.config/bored/ideas).\n\
@@ -37,24 +40,24 @@ To change the value of the counter or reset it, or to add a new idea, you can us
 Options:\n\
 OTHER:\n\
 	--help - Print this and exit\n\
-	--version - Print version and exit"
-	exit 0
-fi
+	--version - Print version and exit"; exit;;
+	esac
+done
 
 # Move the counter up
-let counter++
+counter=$((counter + 1))
 if [ -e $configfile ]; then
 	sed -i '/counter\=/d' $configfile
 	echo "counter=$counter" >> $configfile
 else
 	echo "counter=$counter" >> $configfile
 fi
+
 # Pick random ID
 randomid="$(( ( RANDOM % $(grep -c 'ID' $listfile) )  + 1 ))"
 
 # v1 loaded the activity file and sourced the lines after the ID, allowing for arbitrary code execution.
 # v2 only gets the lines after the ID
-
 name="$(grep -A2 "ID$randomid" $listfile | grep 'name=' | head -n1 | cut -c 6-)"
 desc="$(grep -A2 "ID$randomid" $listfile | grep 'desc=' | head -n1 | cut -c 6-)"
 

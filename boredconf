@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # bored configuration utility
 version="2.0"
@@ -67,8 +67,8 @@ case $choice in
 	q) exit 0;;
 	c) re='^[0-9]+$'
 	   echo -e "${highlight}Enter new counter number:"
-	   while ! [[ "$number" =~ $re ]]; do 
-	   read -re number; done; counter=$number                                                                     
+	   while ! [[ "$number" =~ $re ]]; do
+	   read -re number; done; counter=$number
 	   sed -i '/counter\=/d' $configfile
 	   echo "counter=$counter" >> $configfile
 	   echo "The counter is now $counter."
@@ -83,9 +83,9 @@ case $choice in
 	   echo "name=$name" >> $listfile
 	   echo "desc=$desc" >> $listfile
 	   echo "Done."; exit 0;;
-	u) if command -v curl &>/dev/null; then 
+	u) if command -v curl &>/dev/null; then
 	       numericnew="$(curl -s https://raw.githubusercontent.com/knuxfanwin8/softversions/master/boredbutton)"
-	       if [ "$numeric" -lt "$numericnew" ]; then 
+	       if [ "$numeric" -lt "$numericnew" ]; then
 	           echo "Update available! Press any button to install."
 	           read -ren1
 	           git clone https://github.com/knuxfanwin8/boredbutton

@@ -15,7 +15,12 @@ install:
 	@chmod 755 $(DESTDIR)$(PREFIX)/bin/boredconf
 	@mkdir -p $(DESTDIR)/etc/bored
 	@cp -fp ideas $(DESTDIR)/etc/bored/ideas
+	@echo "Done!"
 
+install-ideas:
+	@mkdir -p $(DESTDIR)/etc/bored
+	@cp -fp ideas $(DESTDIR)/etc/bored/ideas
+	@echo "Done!"
 uninstall:
 	@rm -rf $(DESTDIR)$(PREFIX)/bin/bored
 	@rm -rf $(DESTDIR)$(PREFIX)/bin/boredconf
